@@ -43,6 +43,12 @@
     <Compile Include="OrderRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlooringProgram.Models\FlooringProgram.Models.csproj">
+      <Project>{d88fa386-efe5-47c3-9274-ae795d2dafce}</Project>
+      <Name>FlooringProgram.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
