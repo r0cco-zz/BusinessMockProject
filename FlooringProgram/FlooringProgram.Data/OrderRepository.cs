@@ -10,9 +10,9 @@ namespace FlooringProgram.Data
 {
     public class OrderRepository
     {
-        private const string _filePath = @"DataFiles\Orders.txt";  // gonna change for more files
+        private const string _filePath = @"DataFiles\Orders_10112015.txt";  // gonna change for more files
 
-        public List<Order> GetAllOrders()
+        public List<Order> GetAllOrders(int orderDate)
         {
             List<Order> orders = new List<Order>();
 
@@ -26,15 +26,16 @@ namespace FlooringProgram.Data
 
                 order.OrderNumber = int.Parse(columns[0]);
                 order.CustomerName = columns[1];
-                order.TaxRate = decimal.Parse(columns[2]);
-                order.ProductType = columns[3];
-                order.Area = decimal.Parse(columns[4]);
-                order.MaterialCostPerSqFt = decimal.Parse(columns[5]);
-                order.LaborCostPerSqFt = decimal.Parse(columns[6]);
-                order.MaterialCost = decimal.Parse(columns[7]);
-                order.LaborCost = decimal.Parse(columns[8]);
-                order.Tax = decimal.Parse(columns[9]);
-                order.Total = decimal.Parse(columns[10]);
+                order.State = columns[2];
+                order.TaxRate = decimal.Parse(columns[3]);
+                order.ProductType = (columns[4]);
+                order.Area = decimal.Parse(columns[5]);
+                order.MaterialCostPerSqFt = decimal.Parse(columns[6]);
+                order.LaborCostPerSqFt = decimal.Parse(columns[7]);
+                order.MaterialCost = decimal.Parse(columns[8]);
+                order.LaborCost = decimal.Parse(columns[9]);
+                order.Tax = decimal.Parse(columns[10]);
+                order.Total = decimal.Parse(columns[11]);
 
                 orders.Add(order);
             }
@@ -42,12 +43,12 @@ namespace FlooringProgram.Data
             return orders;
         }
 
-        public Order GetOrder(string orderNumber)
-        {
-            List<Order> accounts = GetAllOrders();
+        //public Order GetOrder(string orderNumber)
+        //{
+        //    List<Order> accounts = GetAllOrders();
 
-            return accounts.FirstOrDefault(a => a. == orderNumber);
-        }
+        //    return accounts.FirstOrDefault(a => a. == orderNumber);
+        //}
 
 
     }

@@ -10,25 +10,24 @@ namespace FlooringProgram.UI.WorkFlow
 {
     public class LookupWorkFlow
     {
-        private Order _currentOrder;
+        private List<Order> _orderListFromDate;
 
         public void Execute()
         {
-            string orderDate = GetOrderDateFromUser();
+            int orderDate = GetOrderDateFromUser();
             DisplayOrdersFromDate(orderDate);
         }
 
-        public string GetOrderDateFromUser()
+        public int GetOrderDateFromUser()
         {
             do
             {
                 Console.Clear();
-                Console.Write("Enter an date in MMDDYYYY format : ");
-                string input = Console.ReadLine();
-
-                if (input.Length == 8)
+                int orderDate;
+                Console.Write("Enter an date in MMDDYYYY format (no other characters) : ");
+                if (int.TryParse(Console.ReadLine(), out orderDate) && orderDate.ToString().Length == 8)
                 {
-                    return input;
+                    return orderDate;
                 }
 
                 Console.WriteLine("That was not a valid account number.");
@@ -38,15 +37,15 @@ namespace FlooringProgram.UI.WorkFlow
             } while (true);
         }
 
-        public void DisplayOrdersFromDate(string orderDate)
+        public void DisplayOrdersFromDate(int orderDate)
         {
             var ops = new OrderOperations();
-            var response = ops.GetOrder(orderDate);
+            var response = ops.GetAllOrdersFromDate(orderDate);
 
             if (response.Success)
             {
-                _currentOrder = response.OrderInfo;
-                PrintOrderInfo(response.OrderInfo);
+                _orderListFromDate = response.OrderList;
+                PrintOrderInfo(response.OrderList);
             }
             else
             {
@@ -54,14 +53,16 @@ namespace FlooringProgram.UI.WorkFlow
             }
         }
 
-        public void PrintOrderInfo(Order orderInfo)
+        public void PrintOrderInfo(List<Order> orderList)
         {
-            Console.Clear();
-            Console.WriteLine("Order Information");
-            Console.WriteLine("****************************************");
-            Console.WriteLine();
-            Console.WriteLine("Order information : {0}", orderInfo.OrderNumber);
+            foreach (var order in orderList)
+            {
+                Console.WriteLine("Order Information");
+                Console.WriteLine("\t{0}, {1}", order.CustomerName, order.Total);
+            }
 
+            Console.WriteLine("Press enter to continue");
+            Console.ReadLine();
         }
     }
 }

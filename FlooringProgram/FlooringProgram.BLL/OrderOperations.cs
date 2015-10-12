@@ -10,15 +10,15 @@ namespace FlooringProgram.BLL
 {
     public class OrderOperations
     {
-        public Response GetOrder(string orderNumber)
+        public Response GetAllOrdersFromDate(int orderDate)
         {
             var repo = new OrderRepository();
 
             var response = new Response();
 
-            var order = repo.GetOrder(orderNumber);
+            var orders = repo.GetAllOrders(orderDate);
 
-            if (order == null)
+            if (orders == null)
             {
                 response.Success = false;
                 response.Message = "This is not the order you are looking for...";
@@ -26,7 +26,7 @@ namespace FlooringProgram.BLL
             else
             {
                 response.Success = true;
-                response.OrderInfo = order;
+                response.OrderList = orders;
             }
 
             return response;
