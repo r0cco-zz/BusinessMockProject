@@ -10,9 +10,9 @@ namespace FlooringProgram.Data
 {
     public class OrderRepository
     {
-        private const string _filePath = @"DataFiles\Orders.txt";
+        private const string _filePath = @"DataFiles\Orders.txt";  // gonna change for more files
 
-        public List<Order> GetAllAccounts()
+        public List<Order> GetAllOrders()
         {
             List<Order> orders = new List<Order>();
 
@@ -41,5 +41,14 @@ namespace FlooringProgram.Data
 
             return orders;
         }
+
+        public Order GetOrder(string orderNumber)
+        {
+            List<Order> accounts = GetAllOrders();
+
+            return accounts.FirstOrDefault(a => a. == orderNumber);
+        }
+
+
     }
 }

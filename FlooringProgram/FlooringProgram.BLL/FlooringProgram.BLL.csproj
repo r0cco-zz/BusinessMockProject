@@ -40,7 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrderOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlooringProgram.Data\FlooringProgram.Data.csproj">
+      <Project>{14c2d284-0cae-411a-b09e-081e4991d19b}</Project>
+      <Name>FlooringProgram.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlooringProgram.Models\FlooringProgram.Models.csproj">
+      <Project>{d88fa386-efe5-47c3-9274-ae795d2dafce}</Project>
+      <Name>FlooringProgram.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

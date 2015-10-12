@@ -35,11 +35,8 @@ namespace FlooringProgram.UI.WorkFlow
                     ProcessChoice(input);
                 }
 
-<<<<<<< HEAD
-            } while (input.ToUpper() != "Q" && input != "5" && input.ToUpper() != "QUIT");
-=======
             } while (input != "5");
->>>>>>> de19b8767f0658dca15e69d01a64a695ff877416
+
         }
 
         private void ProcessChoice(string choice)
@@ -47,6 +44,9 @@ namespace FlooringProgram.UI.WorkFlow
             switch (choice.ToUpper())
             {
                 case "1":
+                    LookupWorkFlow lwf = new LookupWorkFlow();
+                    lwf.Execute();
+                    break;
 
                 case "2":
                     Console.WriteLine("Under construction :(");
