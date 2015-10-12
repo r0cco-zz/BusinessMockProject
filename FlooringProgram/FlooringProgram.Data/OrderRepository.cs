@@ -29,10 +29,10 @@ namespace FlooringProgram.Data
                 order.Area = decimal.Parse(columns[4]);
                 order.CostPerSqFt = decimal.Parse(columns[5]);
                 order.LaborCostPerSqFt = decimal.Parse(columns[6]);
-                order.MaterialCost = decimal.Parse(columns[6]);
-                order.LaborCost = decimal.Parse(columns[6]);
-                order.Tax = decimal.Parse(columns[6]);
-                order.Total = decimal.Parse(columns[6]);
+                order.MaterialCost = decimal.Parse(columns[7]);
+                order.LaborCost = decimal.Parse(columns[8]);
+                order.Tax = decimal.Parse(columns[9]);
+                order.Total = decimal.Parse(columns[10]);
 
                 accounts.Add(order);
             }
