@@ -8,17 +8,17 @@ namespace FlooringProgram.Models
 {
     public class Order
     {
-        int OrderNumber { get; set; }
-        string CustomerName { get; set; }
-        string State { get; set; }
-        decimal TaxRate { get; set; }
-        string ProductType { get; set; }
-        decimal Area { get; set; }
-        decimal MaterialCostPerSqFt { get; set; }
-        decimal LaborCostPerSqFt { get; set; }
-        decimal MaterialCost { get; set; }
-        decimal LaborCost { get; set; }
-        decimal Tax { get; set; }
-        decimal Total { get; set; }
+        public int OrderNumber { get; set; }
+        public string CustomerName { get; set; }
+        public string State { get; set; }
+        public decimal TaxRate { get; set; }
+        public string ProductType { get; set; }
+        public decimal Area { get; set; }
+        public decimal MaterialCostPerSqFt { get; set; }
+        public decimal LaborCostPerSqFt { get; set; }
+        public decimal MaterialCost { get; set; }
+        public decimal LaborCost { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Total { get; set; }
     }
 }

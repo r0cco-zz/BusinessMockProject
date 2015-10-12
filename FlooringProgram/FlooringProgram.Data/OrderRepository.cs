@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlooringProgram.Models;
+using System.IO;
 
 namespace FlooringProgram.Data
 {
     public class OrderRepository
     {
-        private const string _filePath = @"DataFiles\Bank.txt";
+        private const string _filePath = @"DataFiles\Orders.txt";
 
         public List<Order> GetAllAccounts()
         {
-            List<Order> accounts = new List<Order>();
+            List<Order> orders = new List<Order>();
 
             var reader = File.ReadAllLines(_filePath);
 
@@ -27,14 +29,14 @@ namespace FlooringProgram.Data
                 order.TaxRate = decimal.Parse(columns[2]);
                 order.ProductType = columns[3];
                 order.Area = decimal.Parse(columns[4]);
-                order.CostPerSqFt = decimal.Parse(columns[5]);
+                order.MaterialCostPerSqFt = decimal.Parse(columns[5]);
                 order.LaborCostPerSqFt = decimal.Parse(columns[6]);
                 order.MaterialCost = decimal.Parse(columns[7]);
                 order.LaborCost = decimal.Parse(columns[8]);
                 order.Tax = decimal.Parse(columns[9]);
                 order.Total = decimal.Parse(columns[10]);
 
-                accounts.Add(order);
+                orders.Add(order);
             }
 
             return orders;

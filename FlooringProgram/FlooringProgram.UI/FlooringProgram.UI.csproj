@@ -51,9 +51,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataFiles\Orders.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="DataFiles\Orders.txt" />
     <Content Include="DataFiles\ProductTypes.txt" />
     <Content Include="DataFiles\States.txt" />
   </ItemGroup>

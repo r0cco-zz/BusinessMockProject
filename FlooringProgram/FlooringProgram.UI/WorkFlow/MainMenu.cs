@@ -35,7 +35,7 @@ namespace FlooringProgram.UI.WorkFlow
                     ProcessChoice(input);
                 }
 
-            } while (input.ToUpper() != "Q" || input != "5" || input.ToUpper() != "QUIT");
+            } while (input.ToUpper() != "Q" && input != "5" && input.ToUpper() != "QUIT");
         }
 
         private void ProcessChoice(string choice)
@@ -62,14 +62,14 @@ namespace FlooringProgram.UI.WorkFlow
                     Console.ReadLine();
                     break;
 
-                case "5":
-                case "Q":
-                case "QUIT":
-                case "EXIT":
-                    Console.WriteLine("Under construction :(");
-                    Console.WriteLine("Press enter to continue");
-                    Console.ReadLine();
-                    break;
+                //case "5":
+                //case "Q":
+                //case "QUIT":
+                //case "EXIT":
+                //    Console.WriteLine("Under construction :(");
+                //    Console.WriteLine("Press enter to continue");
+                //    Console.ReadLine();
+                //    break;
 
                 default:
                     Console.WriteLine("{0} is an invalid entry", choice);

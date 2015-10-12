@@ -13,6 +13,8 @@ namespace FlooringProgram.UI
         {
             var menu = new MainMenu();
             menu.Execute();
+            Console.WriteLine("Okay, goodbye...");
+            Console.ReadLine();
         }
     }
 }
