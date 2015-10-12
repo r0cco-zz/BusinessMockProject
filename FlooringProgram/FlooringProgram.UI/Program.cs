@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlooringProgram.UI.WorkFlow;
 
 namespace FlooringProgram.UI
 {
@@ -10,6 +11,8 @@ namespace FlooringProgram.UI
     {
         static void Main(string[] args)
         {
+            var menu = new MainMenu();
+            menu.Execute();
         }
     }
 }

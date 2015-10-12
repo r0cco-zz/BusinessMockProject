@@ -1,0 +1,5 @@
+﻿ProductType,CostPerSquareFoot,LaborCostPerSquareFoot
+Wood,5.15,4.75
+Vinyl,3.25,4.00
+Tile,8.50,6.35
+Bamboo,7.10,5.50
