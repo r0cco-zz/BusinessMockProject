@@ -30,12 +30,16 @@ namespace FlooringProgram.UI.WorkFlow
 
                 input = Console.ReadLine();
 
-                if (input.ToUpper() != "Q")
+                if (input != "5")
                 {
                     ProcessChoice(input);
                 }
 
+<<<<<<< HEAD
             } while (input.ToUpper() != "Q" && input != "5" && input.ToUpper() != "QUIT");
+=======
+            } while (input != "5");
+>>>>>>> de19b8767f0658dca15e69d01a64a695ff877416
         }
 
         private void ProcessChoice(string choice)
