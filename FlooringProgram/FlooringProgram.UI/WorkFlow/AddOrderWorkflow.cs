@@ -139,7 +139,8 @@ namespace FlooringProgram.UI.WorkFlow
             customerName = GetCustomerNameFromUser();
             string state = GetStateFromUser();
             string productType = GetProductTypeFromUser();
-            decimal area = GetAreaFromUser();
+            decimal area = 0;
+            area = GetAreaFromUser();
 
             var ops = new OrderOperations();
 
@@ -148,10 +149,10 @@ namespace FlooringProgram.UI.WorkFlow
             if (response.Success)
             {
                 Console.WriteLine(
-                    "Name : {0}\nState : {1}\nOrder Number : {2}\nArea : {3}\nProduct type : {4}\nMaterial cost per sq ft : {5}\nLabor cost per sq ft : {6}\nState Tax : {7}\nTotal Material Cost : {8}\nTotal Labor Cost : {9}\nTotal Tax : {10}\nTotal Cost : {11}",
+                    "Name : {0}\nState : {1}\nOrder Number : {2}\nArea : {3}\nProduct type : {4}\nMaterial cost per sq ft : {5:c}\nLabor cost per sq ft : {6:c}\nState Tax : {7:P}\nTotal Material Cost : {8:c}\nTotal Labor Cost : {9:c}\nTotal Tax : {10:c}\nTotal Cost : {11:c}",
                     response.Order.CustomerName, response.Order.State, response.Order.OrderNumber, response.Order.Area,
                     response.Order.ProductType.ProductType, response.Order.ProductType.MaterialCost,
-                    response.Order.ProductType.LaborCost, response.Order.TaxRate, response.Order.MaterialCost,
+                    response.Order.ProductType.LaborCost, response.Order.TaxRate/100, response.Order.MaterialCost,
                     response.Order.LaborCost, response.Order.Tax, response.Order.Total);
 
                 Console.ReadLine();

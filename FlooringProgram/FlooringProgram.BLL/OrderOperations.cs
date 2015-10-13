@@ -37,15 +37,17 @@ namespace FlooringProgram.BLL
             var repo = new OrderRepository(); //change to interface type later
             Order newOrder = new Order();
             newOrder.CustomerName = customerName;
+            newOrder.Area = area;
             newOrder.OrderNumber = repo.GetOrderNumber(orderDate);
             newOrder.ProductType = repo.GetProduct(productType);
             var currentState = repo.GetState(state);
             newOrder.State = currentState.StateAbb;
+            newOrder.TaxRate = currentState.TaxRate;
             decimal MatCost = area * newOrder.ProductType.MaterialCost;
             newOrder.MaterialCost = MatCost;
             decimal LabCost = area * newOrder.ProductType.LaborCost;
             newOrder.LaborCost = LabCost;
-            decimal tax = (MatCost + LabCost) * currentState.TaxRate;
+            decimal tax = (MatCost + LabCost) * (currentState.TaxRate/100);
             newOrder.Tax = tax;
             newOrder.Total = MatCost + LabCost + tax;
 
