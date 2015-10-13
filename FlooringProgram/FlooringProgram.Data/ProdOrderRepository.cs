@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FlooringProgram.Models;
-using System.IO;
 
 namespace FlooringProgram.Data
 {
-    public class OrderRepository : IOrderRepository
+    public class ProdOrderRepository : IOrderRepository
     {
         public List<Order> GetAllOrders(int orderDate)
         {
@@ -42,14 +42,5 @@ namespace FlooringProgram.Data
 
             return orders;
         }
-
-        //public Order GetOrder(string orderNumber)
-        //{
-        //    List<Order> accounts = GetAllOrders();
-
-        //    return accounts.FirstOrDefault(a => a. == orderNumber);
-        //}
-
-
     }
 }

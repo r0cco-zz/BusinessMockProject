@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrderRepository.cs" />
+    <Compile Include="OrderRepositoryFactory.cs" />
+    <Compile Include="ProdOrderRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
