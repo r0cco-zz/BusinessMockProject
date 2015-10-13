@@ -16,6 +16,8 @@ namespace FlooringProgram.Data
         {
             string _filePath = String.Format(@"DataFiles\Orders_{0}.txt", orderDate); // gonna change for more files
 
+            GetProducts();
+
             List<Order> orders = new List<Order>();
 
             var reader = File.ReadAllLines(_filePath);
