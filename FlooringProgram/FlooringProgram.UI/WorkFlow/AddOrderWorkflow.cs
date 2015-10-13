@@ -155,7 +155,13 @@ namespace FlooringProgram.UI.WorkFlow
                     response.Order.ProductType.LaborCost, response.Order.TaxRate/100, response.Order.MaterialCost,
                     response.Order.LaborCost, response.Order.Tax, response.Order.Total);
 
-                Console.ReadLine();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.Write("Are you sure you want to add this order?");
+                string input = Console.ReadLine();
+
+                //method to take this input and use it to either write on the data or not
             }
         }
     }
