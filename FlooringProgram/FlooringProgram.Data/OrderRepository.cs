@@ -27,6 +27,7 @@ namespace FlooringProgram.Data
                 var columns = reader[i].Split(',');
 
                 var order = new Order();
+                order.ProductType = new ProductTypes();
 
                 order.OrderNumber = int.Parse(columns[0]);
                 order.CustomerName = columns[1];
