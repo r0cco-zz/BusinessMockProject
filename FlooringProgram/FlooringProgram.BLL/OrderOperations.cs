@@ -31,5 +31,16 @@ namespace FlooringProgram.BLL
 
             return response;
         }
+
+        public Response AddOrder(int orderDate, string customerName, string state, string productType, decimal area)
+        {
+            var repo = new OrderRepository(); //change to interface type later
+
+            var response = new Response();
+
+
+
+            return response;
+        }
     }
 }

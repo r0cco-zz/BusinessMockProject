@@ -8,22 +8,22 @@ using FlooringProgram.Models;
 
 namespace FlooringProgram.Data
 {
-    public static class OrderRepositoryFactory
+    public  class OrderRepositoryFactory
     {
-        //private string sAttr;
+        private string _sAttr = ConfigurationManager.AppSettings["Mode"];
 
-        public static IOrderRepository CreateOrderRepository(var x)
+        public static IOrderRepository CreateOrderRepository(string _sAttr)
         {
-            switch (x)
+            switch (_sAttr)
             {
-                case "D":
+                case "Dev":
                     return new OrderRepository();
 
-                case "P":
+                case "Prod":
                     return new ProdOrderRepository();
 
                 default:
-                    throw new NotSupportedException(String.Format("{0} not supported!", Type));
+                    throw new NotSupportedException(String.Format("{0} not supported!", _sAttr));
             }
         }
     }

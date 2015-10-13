@@ -10,18 +10,45 @@ namespace FlooringProgram.UI.WorkFlow
     {
         public void Execute()
         {
-            int orderNumber;
+            int orderDate = GetDateFromUser();
+
             string customerName = GetCustomerNameFromUser();
             string state = GetStateFromUser();
-            decimal taxRate;
             string productType = GetProductTypeFromUser();
-            decimal area = GetAreaFromUser;
+            decimal area = GetAreaFromUser();
+            int orderNumber;
+            decimal taxRate;
             decimal costPerSqFt;
             decimal laborPerSqFt;
             decimal materialCost;
             decimal laborCost;
             decimal tax;
             decimal total;
+
+            //method to display order to user
+
+            //ask user if they want to save
+        }
+
+        public int GetDateFromUser()
+        {
+            do
+            {
+                Console.Clear();
+                Console.Write("Please enter order date (as MMDDYYYY) : ");
+                int orderDate;
+                
+
+                if (int.TryParse((Console.ReadLine()), out orderDate) && orderDate.ToString().Length == 8)
+                {
+                    return orderDate;
+                }
+
+                Console.WriteLine("Please Enter customer name (customer names must be at least two characters).");
+                Console.WriteLine("Press enter to continue");
+                Console.ReadLine();
+
+            } while (true);
         }
 
         public string GetCustomerNameFromUser()
@@ -29,7 +56,7 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 Console.Clear();
-                Console.Write("Please enter  customer name : ");
+                Console.Write("Please enter customer name : ");
                 string customerName = Console.ReadLine();
 
                 if (customerName != "" && customerName.Length >= 2)
@@ -92,7 +119,7 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Write("Please enter the area needed : ");
                 decimal area = decimal.Parse(Console.ReadLine());
 
-                if (area != 0)
+                if (area > 0)
                 {
                     return area;
                 }
@@ -103,5 +130,7 @@ namespace FlooringProgram.UI.WorkFlow
 
             } while (true);
         }
+
+
     }
 }
