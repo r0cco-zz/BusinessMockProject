@@ -10,10 +10,10 @@ namespace FlooringProgram.Data
 {
     public class OrderRepository
     {
-        private const string _filePath = @"DataFiles\Orders_10112015.txt";  // gonna change for more files
-
         public List<Order> GetAllOrders(int orderDate)
         {
+            string _filePath = String.Format(@"DataFiles\Orders_{0}.txt", orderDate);  // gonna change for more files
+
             List<Order> orders = new List<Order>();
 
             var reader = File.ReadAllLines(_filePath);
