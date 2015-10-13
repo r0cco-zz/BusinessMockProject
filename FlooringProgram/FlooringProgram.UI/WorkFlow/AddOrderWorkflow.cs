@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlooringProgram.BLL;
 
 namespace FlooringProgram.UI.WorkFlow
 {
@@ -10,12 +11,12 @@ namespace FlooringProgram.UI.WorkFlow
     {
         public void Execute()
         {
-            int orderDate = GetDateFromUser();
+            //int orderDate = GetDateFromUser();
 
-            string customerName = GetCustomerNameFromUser();
-            string state = GetStateFromUser();
-            string productType = GetProductTypeFromUser();
-            decimal area = GetAreaFromUser();
+            //string customerName = GetCustomerNameFromUser();
+            //string state = GetStateFromUser();
+            //string productType = GetProductTypeFromUser();
+            //decimal area = GetAreaFromUser();
             int orderNumber;
             decimal taxRate;
             decimal costPerSqFt;
@@ -25,7 +26,7 @@ namespace FlooringProgram.UI.WorkFlow
             decimal tax;
             decimal total;
 
-            //method to display order to user
+            DisplayOrderInfo();
 
             //ask user if they want to save
         }
@@ -131,6 +132,24 @@ namespace FlooringProgram.UI.WorkFlow
             } while (true);
         }
 
+        public void DisplayOrderInfo()
+        {
+            int orderDate = GetDateFromUser();
+            string customerName = GetCustomerNameFromUser();
+            string state = GetStateFromUser();
+            string productType = GetProductTypeFromUser();
+            decimal area = GetAreaFromUser();
 
+            var ops = new OrderOperations();
+
+            var response = ops.AddOrder(orderDate, customerName, state, productType, area);
+
+            if (response.Success)
+            {
+                Console.WriteLine("{0},{1},{2}",response.Order.LaborCost, response.Order.CustomerName, response.Order.OrderNumber);
+
+                Console.ReadLine();
+            }
+        }
     }
 }

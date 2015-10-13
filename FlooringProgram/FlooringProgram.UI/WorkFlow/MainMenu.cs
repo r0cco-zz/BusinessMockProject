@@ -49,9 +49,8 @@ namespace FlooringProgram.UI.WorkFlow
                     break;
 
                 case "2":
-                    Console.WriteLine("Under construction :(");
-                    Console.WriteLine("Press enter to continue");
-                    Console.ReadLine();
+                    AddOrderWorkflow aowf = new AddOrderWorkflow();
+                    aowf.Execute();
                     break;
 
                 case "3":

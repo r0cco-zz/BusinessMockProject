@@ -39,6 +39,7 @@ namespace FlooringProgram.BLL
             newOrder.OrderNumber = repo.GetOrderNumber(orderDate);
             newOrder.ProductType = repo.GetProduct(productType);
             var currentState = repo.GetState(state);
+            newOrder.State = currentState.StateAbb;
             decimal materialCost = area*newOrder.ProductType.MaterialCost;
             decimal laborCost = area*newOrder.ProductType.LaborCost;
             decimal tax = (materialCost + laborCost)*currentState.TaxRate;
@@ -46,10 +47,10 @@ namespace FlooringProgram.BLL
 
             var response = new Response();
 
-            if (newOrder.OrderNumber == null || newOrder.ProductType == null || currentState == null || materialCost == null
-                || laborCost == null || tax == null || total == null)
+            if (true)
             {
                 response.Success = true;
+                response.Order = newOrder;
             }
             else
             {

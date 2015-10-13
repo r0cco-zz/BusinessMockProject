@@ -56,18 +56,19 @@ namespace FlooringProgram.Data
 
             List<ProductTypes> products = new List<ProductTypes>();
 
-            var product = new ProductTypes();
-
             var reader = File.ReadAllLines(_filePath);
 
             for (int i = 1; i < reader.Length; i++)
             {
                 var columns = reader[i].Split(',');
 
+                var product = new ProductTypes();
+
                 product.ProductType = columns[0];
                 product.MaterialCost = decimal.Parse(columns[1]);
                 product.LaborCost = decimal.Parse(columns[2]);
 
+                products.Add(product);
             }
 
             return products;
@@ -85,18 +86,19 @@ namespace FlooringProgram.Data
 
             List<StateInfo> states = new List<StateInfo>();
 
-            var state = new StateInfo();
-
             var reader = File.ReadAllLines(_filePath);
 
             for (int i = 1; i < reader.Length; i++)
             {
                 var columns = reader[i].Split(',');
 
+                var state = new StateInfo();
+
                 state.StateAbb = columns[0];
                 state.StateName = columns[1];
                 state.TaxRate = decimal.Parse(columns[2]);
 
+                states.Add(state);
             }
 
             return states;
@@ -105,13 +107,17 @@ namespace FlooringProgram.Data
         public StateInfo GetState(string StateAbb)
         {
             List<StateInfo> states = GetStates();
-            return states.FirstOrDefault(a => a.StateAbb == StateAbb);
+            foreach (var a in states)
+            {
+                if (a.StateAbb == StateAbb) return a;
+            }
+            return null;
         }
 
         public int GetOrderNumber(int orderDate)
         {
             bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}", orderDate));
-            if (alreadyOrder)
+            if (!alreadyOrder)
             {
                 var orders = GetAllOrders(orderDate);
                 return orders.Count + 1;
