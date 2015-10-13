@@ -38,7 +38,7 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Clear();
                 Console.Write("Please enter order date (as MMDDYYYY) : ");
                 int orderDate;
-                
+
 
                 if (int.TryParse((Console.ReadLine()), out orderDate) && orderDate.ToString().Length == 8)
                 {
@@ -135,7 +135,8 @@ namespace FlooringProgram.UI.WorkFlow
         public void DisplayOrderInfo()
         {
             int orderDate = GetDateFromUser();
-            string customerName = GetCustomerNameFromUser();
+            string customerName = "";
+            customerName = GetCustomerNameFromUser();
             string state = GetStateFromUser();
             string productType = GetProductTypeFromUser();
             decimal area = GetAreaFromUser();
@@ -146,7 +147,12 @@ namespace FlooringProgram.UI.WorkFlow
 
             if (response.Success)
             {
-                Console.WriteLine("{0},{1},{2}",response.Order.LaborCost, response.Order.CustomerName, response.Order.OrderNumber);
+                Console.WriteLine(
+                    "Name : {0}\nState : {1}\nOrder Number : {2}\nArea : {3}\nProduct type : {4}\nMaterial cost per sq ft : {5}\nLabor cost per sq ft : {6}\nState Tax : {7}\nTotal Material Cost : {8}\nTotal Labor Cost : {9}\nTotal Tax : {10}\nTotal Cost : {11}",
+                    response.Order.CustomerName, response.Order.State, response.Order.OrderNumber, response.Order.Area,
+                    response.Order.ProductType.ProductType, response.Order.ProductType.MaterialCost,
+                    response.Order.ProductType.LaborCost, response.Order.TaxRate, response.Order.MaterialCost,
+                    response.Order.LaborCost, response.Order.Tax, response.Order.Total);
 
                 Console.ReadLine();
             }
