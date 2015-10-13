@@ -16,6 +16,7 @@ namespace FlooringProgram.Data
 
             List<Order> orders = new List<Order>();
 
+            
             var reader = File.ReadAllLines(_filePath);
 
             for (int i = 1; i < reader.Length; i++)
@@ -28,10 +29,10 @@ namespace FlooringProgram.Data
                 order.CustomerName = columns[1];
                 order.State = columns[2];
                 order.TaxRate = decimal.Parse(columns[3]);
-                order.ProductType = (columns[4]);
+                order.ProductType.ProductType = (columns[4]);
                 order.Area = decimal.Parse(columns[5]);
-                order.MaterialCostPerSqFt = decimal.Parse(columns[6]);
-                order.LaborCostPerSqFt = decimal.Parse(columns[7]);
+                order.ProductType.MaterialCost = decimal.Parse(columns[6]);
+                order.ProductType.LaborCost = decimal.Parse(columns[7]);
                 order.MaterialCost = decimal.Parse(columns[8]);
                 order.LaborCost = decimal.Parse(columns[9]);
                 order.Tax = decimal.Parse(columns[10]);

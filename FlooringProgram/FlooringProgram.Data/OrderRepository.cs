@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FlooringProgram.Models;
+using FlooringProgram.Data;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 
@@ -29,10 +30,10 @@ namespace FlooringProgram.Data
                 order.CustomerName = columns[1];
                 order.State = columns[2];
                 order.TaxRate = decimal.Parse(columns[3]);
-                order.ProductType = (columns[4]);
+                order.ProductType.ProductType = (columns[4]);
                 order.Area = decimal.Parse(columns[5]);
-                order.MaterialCostPerSqFt = decimal.Parse(columns[6]);
-                order.LaborCostPerSqFt = decimal.Parse(columns[7]);
+                order.ProductType.MaterialCost = decimal.Parse(columns[6]);
+                order.ProductType.LaborCost = decimal.Parse(columns[7]);
                 order.MaterialCost = decimal.Parse(columns[8]);
                 order.LaborCost = decimal.Parse(columns[9]);
                 order.Tax = decimal.Parse(columns[10]);
@@ -69,6 +70,12 @@ namespace FlooringProgram.Data
             return products;
         }
 
+        public ProductTypes GetProduct(string ProductType)
+        {
+            List<ProductTypes> products = GetProducts();
+            return products.FirstOrDefault(a => a.ProductType == ProductType);
+        }
+
         public List<StateInfo> GetStates()
         {
             string _filePath = @"DataFiles\States.txt";
@@ -90,8 +97,24 @@ namespace FlooringProgram.Data
             }
 
             return states;
-        } 
+        }
 
+        public StateInfo GetState(string StateAbb)
+        {
+            List<StateInfo> states = GetStates();
+            return states.FirstOrDefault(a => a.StateAbb == StateAbb);
+        }
+
+        public int GetOrderNumber(int orderDate)
+        {
+            bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}", orderDate));
+            if (alreadyOrder)
+            {
+                var orders = GetAllOrders(orderDate);
+                return orders.Count + 1;
+            }
+            return 1;
+        }
 
     }
 }  

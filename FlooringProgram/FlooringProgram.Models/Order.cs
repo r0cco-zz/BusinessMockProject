@@ -12,10 +12,10 @@ namespace FlooringProgram.Models
         public string CustomerName { get; set; }
         public string State { get; set; }
         public decimal TaxRate { get; set; }
-        public string ProductType { get; set; }
+        public ProductTypes ProductType { get; set; }
         public decimal Area { get; set; }
-        public decimal MaterialCostPerSqFt { get; set; }
-        public decimal LaborCostPerSqFt { get; set; }
+        //public decimal MaterialCostPerSqFt { get; set; }
+        //public decimal LaborCostPerSqFt { get; set; }
         public decimal MaterialCost { get; set; }
         public decimal LaborCost { get; set; }
         public decimal Tax { get; set; }

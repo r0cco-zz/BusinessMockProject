@@ -35,11 +35,27 @@ namespace FlooringProgram.BLL
         public Response AddOrder(int orderDate, string customerName, string state, string productType, decimal area)
         {
             var repo = new OrderRepository(); //change to interface type later
+            Order newOrder = new Order();
+            newOrder.OrderNumber = repo.GetOrderNumber(orderDate);
+            newOrder.ProductType = repo.GetProduct(productType);
+            var currentState = repo.GetState(state);
+            decimal materialCost = area*newOrder.ProductType.MaterialCost;
+            decimal laborCost = area*newOrder.ProductType.LaborCost;
+            decimal tax = (materialCost + laborCost)*currentState.TaxRate;
+            decimal total = materialCost + laborCost + tax;
 
             var response = new Response();
 
-
-
+            if (newOrder.OrderNumber == null || newOrder.ProductType == null || currentState == null || materialCost == null
+                || laborCost == null || tax == null || total == null)
+            {
+                response.Success = true;
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "There was a problem with creating your order";
+            }
             return response;
         }
     }
