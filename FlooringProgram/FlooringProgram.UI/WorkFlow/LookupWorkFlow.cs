@@ -30,7 +30,7 @@ namespace FlooringProgram.UI.WorkFlow
                     return orderDate;
                 }
 
-                Console.WriteLine("That was not a valid account number.");
+                Console.WriteLine("That was not a valid order date.");
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
 
@@ -58,7 +58,7 @@ namespace FlooringProgram.UI.WorkFlow
             foreach (var order in orderList)
             {
                 Console.WriteLine("Order Information");
-                Console.WriteLine("\t{0}, {1}", order.CustomerName, order.Total);
+                Console.WriteLine("\t{0}, {1}\n", order.CustomerName, order.Total);
             }
 
             Console.WriteLine("Press enter to continue");
