@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FlooringProgram.Models;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FlooringProgram.Data
 {
@@ -12,7 +13,7 @@ namespace FlooringProgram.Data
     {
         public List<Order> GetAllOrders(int orderDate)
         {
-            string _filePath = String.Format(@"DataFiles\Orders_{0}.txt", orderDate);  // gonna change for more files
+            string _filePath = String.Format(@"DataFiles\Orders_{0}.txt", orderDate); // gonna change for more files
 
             List<Order> orders = new List<Order>();
 
@@ -43,13 +44,63 @@ namespace FlooringProgram.Data
             return orders;
         }
 
-        //public Order GetOrder(string orderNumber)
-        //{
-        //    List<Order> accounts = GetAllOrders();
+        public List<ProductTypes> GetProducts()
+        {
 
-        //    return accounts.FirstOrDefault(a => a. == orderNumber);
-        //}
+            string _filePath = @"DataFiles\ProductTypes.txt";
+
+
+            List<ProductTypes> products = new List<ProductTypes>();
+
+            var product = new ProductTypes();
+
+            var reader = File.ReadAllLines(_filePath);
+
+            for (int i = 1; i < reader.Length; i++)
+            {
+                var columns = reader[i].Split(',');
+
+                product.ProductType = columns[0];
+                product.MaterialCost = decimal.Parse(columns[1]);
+                product.LaborCost = decimal.Parse(columns[2]);
+
+            }
+
+            return products;
+        }
+
+        public List<StateInfo> GetStates()
+        {
+            string _filePath = @"DataFiles\States.txt";
+
+            List<StateInfo> states = new List<StateInfo>();
+
+            var state = new StateInfo();
+
+            var reader = File.ReadAllLines(_filePath);
+
+            for (int i = 1; i < reader.Length; i++)
+            {
+                var columns = reader[i].Split(',');
+
+                state.StateAbb = columns[0];
+                state.StateName = columns[1];
+                state.TaxRate = decimal.Parse(columns[2]);
+
+            }
+
+            return states;
+        } 
 
 
     }
-}
+}  
+
+
+
+
+
+
+
+
+   
