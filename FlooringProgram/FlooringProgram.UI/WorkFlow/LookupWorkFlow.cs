@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FlooringProgram.BLL;
 using FlooringProgram.Models;
+using System.IO;
 
 namespace FlooringProgram.UI.WorkFlow
 {
@@ -23,9 +24,13 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 Console.Clear();
+                string orderDateString;
                 int orderDate;
                 Console.Write("Enter an date in MMDDYYYY format (no other characters) : ");
-                if (int.TryParse(Console.ReadLine(), out orderDate) && orderDate.ToString().Length == 8)
+                orderDateString = Console.ReadLine();
+                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
+                if (int.TryParse(orderDateString, out orderDate) && orderDate.ToString().Length == 8
+                    && doesExist)
                 {
                     return orderDate;
                 }
