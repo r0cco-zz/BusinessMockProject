@@ -60,13 +60,7 @@ namespace FlooringProgram.BLL
                 response.Order = newOrder;
                 return response;
             }
-            //else
-            //{
-            //    response.Success = false;
-            //    response.Message = "There was a problem with creating your order";
-            //    return response;
-            //}
-            
+           
         }
 
         public Response RemoveOrder(int orderDate, int orderNumber)
@@ -110,6 +104,62 @@ namespace FlooringProgram.BLL
 
             var repo = new OrderRepository();
             repo.DeleteOrder(BLLRemoveOrder);
+        }
+
+        public Response EditOrder(int orderDate, int orderNumber)
+        {
+            var repo = new OrderRepository();
+            var currentOrder = repo.CheckForOrder(orderDate, orderNumber);
+
+            var response = new Response();
+            if (currentOrder != null)
+            {
+                response.Success = true;
+                response.Message = "We found an order matching that data.";
+                response.Order = currentOrder;
+                return response;
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "We did not find an order matching that data.";
+                return response;
+            }
+        }
+
+        public Response EditedOrder(Response OrderInfo)
+        {
+            var repo = new OrderRepository(); //change to interface type later
+            Order newOrder = new Order();
+            newOrder.CustomerName = OrderInfo.Order.CustomerName; //clean these calculations up (possibly new method?)
+            newOrder.Area = OrderInfo.Order.Area;
+            newOrder.OrderNumber = OrderInfo.Order.OrderNumber;
+            newOrder.OrderDate = OrderInfo.Order.OrderDate;
+            newOrder.ProductType = OrderInfo.Order.ProductType;
+            newOrder.State = OrderInfo.Order.State;
+            newOrder.TaxRate = OrderInfo.Order.TaxRate;
+            decimal MatCost = OrderInfo.Order.Area * newOrder.ProductType.MaterialCost;
+            newOrder.MaterialCost = MatCost;
+            decimal LabCost = OrderInfo.Order.Area * newOrder.ProductType.LaborCost;
+            newOrder.LaborCost = LabCost;
+            decimal tax = (MatCost + LabCost) * (OrderInfo.Order.TaxRate / 100);
+            newOrder.Tax = tax;
+            newOrder.Total = MatCost + LabCost + tax;
+
+            var response = new Response();
+
+            if (true)
+            {
+                response.Success = true;
+                response.Order = newOrder;
+                return response;
+            }
+        }
+
+        public void PassEditBLL(Response response)
+        {
+            var repo = new OrderRepository();
+            repo.ChangeOrder(response);
         }
     }
 }
