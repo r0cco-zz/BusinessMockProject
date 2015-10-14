@@ -26,6 +26,10 @@ namespace FlooringProgram.Data
 
             for (int i = 1; i < reader.Length; i++)
             {
+                if (reader[i].Length < 1)
+                {
+                    continue;
+                }
                 var columns = reader[i].Split(',');
 
                 var order = new Order();
@@ -122,7 +126,8 @@ namespace FlooringProgram.Data
             if (alreadyOrder)
             {
                 var orders = GetAllOrders(orderDate);
-                return orders.Count + 1;
+                var max = orders.Max(a => a.OrderNumber);
+                return max + 1;
             }
             return 1;
         }
@@ -182,7 +187,8 @@ namespace FlooringProgram.Data
             }
             else
             {
-                orders.Remove(order.Order);
+                orders = orders.Where(a => a.OrderNumber != order.Order.OrderNumber).ToList();
+                //orders.Remove(orderToRemove);
                 using (var writer = File.CreateText(filePath))
                 {
                     writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
@@ -195,7 +201,12 @@ namespace FlooringProgram.Data
                     }
                 }
             }
+        }
 
+        public void ChangeOrder(Response order)
+        {
+            DeleteOrder(order);
+            WriteLine(order);
         }
 
     }

@@ -54,9 +54,8 @@ namespace FlooringProgram.UI.WorkFlow
                     break;
 
                 case "3":
-                    Console.WriteLine("Under construction :(");
-                    Console.WriteLine("Press enter to continue");
-                    Console.ReadLine();
+                    EditWorkflow ewfl = new EditWorkflow();
+                    ewfl.Execute();
                     break;
 
                 case "4":
