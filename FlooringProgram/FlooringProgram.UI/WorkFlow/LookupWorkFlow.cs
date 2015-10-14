@@ -63,7 +63,7 @@ namespace FlooringProgram.UI.WorkFlow
             foreach (var order in orderList)
             {
                 Console.WriteLine("Order number {0}", order.OrderNumber);
-                Console.WriteLine("\t{0}, Total : {1}\n", order.CustomerName, order.Total);
+                Console.WriteLine("\t{0}, Total : {1:c}\n", order.CustomerName, order.Total);
             }
 
             Console.WriteLine("Press enter to continue");
