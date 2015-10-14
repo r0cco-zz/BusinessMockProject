@@ -126,11 +126,8 @@ namespace FlooringProgram.Data
             if (alreadyOrder)
             {
                 var orders = GetAllOrders(orderDate);
-<<<<<<< HEAD
-=======
                 var max = orders.Max(a => a.OrderNumber);
                 return max + 1;
->>>>>>> 3a785aaa50160cdee58562167fb7f933e7fd9703
             }
             return 1;
         }
