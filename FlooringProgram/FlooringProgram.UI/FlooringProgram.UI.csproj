@@ -49,6 +49,7 @@
     <Compile Include="WorkFlow\AddOrderWorkflow.cs" />
     <Compile Include="WorkFlow\LookupWorkFlow.cs" />
     <Compile Include="WorkFlow\MainMenu.cs" />
+    <Compile Include="WorkFlow\RemoveOrderWorkFlow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

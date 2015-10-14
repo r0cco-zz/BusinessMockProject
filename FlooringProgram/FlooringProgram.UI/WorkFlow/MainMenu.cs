@@ -60,9 +60,8 @@ namespace FlooringProgram.UI.WorkFlow
                     break;
 
                 case "4":
-                    Console.WriteLine("Under construction :(");
-                    Console.WriteLine("Press enter to continue");
-                    Console.ReadLine();
+                     RemoveOrderWorkFlow rowfl = new RemoveOrderWorkFlow();
+                    rowfl.Execute();
                     break;
 
                 //case "5":

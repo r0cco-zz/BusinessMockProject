@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace FlooringProgram.Data
                 order.LaborCost = decimal.Parse(columns[9]);
                 order.Tax = decimal.Parse(columns[10]);
                 order.Total = decimal.Parse(columns[11]);
-
+                order.OrderDate = int.Parse(_filePath.Substring(17, 8));
                 orders.Add(order);
             }
 
@@ -117,8 +118,8 @@ namespace FlooringProgram.Data
 
         public int GetOrderNumber(int orderDate)
         {
-            bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}", orderDate));
-            if (!alreadyOrder)
+            bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDate));
+            if (alreadyOrder)
             {
                 var orders = GetAllOrders(orderDate);
                 return orders.Count + 1;
@@ -128,14 +129,73 @@ namespace FlooringProgram.Data
 
         public void WriteLine(Response OrderInfo)
         {
-            using (var writer = File.AppendText(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate)))
+            bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate));
+            if (alreadyOrder)
             {
-                writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderInfo.Order.OrderNumber,
-                    OrderInfo.Order.CustomerName, OrderInfo.Order.State,
-                    OrderInfo.Order.TaxRate, OrderInfo.Order.ProductType.ProductType, OrderInfo.Order.Area,
-                    OrderInfo.Order.ProductType.MaterialCost, OrderInfo.Order.ProductType.LaborCost,
-                    OrderInfo.Order.MaterialCost, OrderInfo.Order.LaborCost, OrderInfo.Order.Tax, OrderInfo.Order.Total);
+                using (
+                    var writer = File.AppendText(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate)))
+                {
+                    writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderInfo.Order.OrderNumber,
+                        OrderInfo.Order.CustomerName, OrderInfo.Order.State,
+                        OrderInfo.Order.TaxRate, OrderInfo.Order.ProductType.ProductType, OrderInfo.Order.Area,
+                        OrderInfo.Order.ProductType.MaterialCost, OrderInfo.Order.ProductType.LaborCost,
+                        OrderInfo.Order.MaterialCost, OrderInfo.Order.LaborCost, OrderInfo.Order.Tax,
+                        OrderInfo.Order.Total);
+                }
             }
+            else
+            {
+                using (
+                    var writer = File.CreateText(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate)))
+                {
+
+                    writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                    writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderInfo.Order.OrderNumber,
+                        OrderInfo.Order.CustomerName, OrderInfo.Order.State,
+                        OrderInfo.Order.TaxRate, OrderInfo.Order.ProductType.ProductType, OrderInfo.Order.Area,
+                        OrderInfo.Order.ProductType.MaterialCost, OrderInfo.Order.ProductType.LaborCost,
+                        OrderInfo.Order.MaterialCost, OrderInfo.Order.LaborCost, OrderInfo.Order.Tax,
+                        OrderInfo.Order.Total);
+                }
+            }
+        }
+
+        public Order CheckForOrder(int orderDate, int orderNumber)
+        {
+            string filePath = (String.Format(@"DataFiles\Orders_{0}.txt", orderDate));
+            bool alreadyOrder = File.Exists(filePath);
+            if (alreadyOrder)
+            {
+                var orders = GetAllOrders(orderDate);
+                return orders.FirstOrDefault(a => a.OrderNumber == orderNumber);
+            }
+            return null;
+        }
+
+        public void DeleteOrder(Response order)
+        {
+            string filePath = (String.Format(@"DataFiles\Orders_{0}.txt", order.Order.OrderDate));
+            var orders = GetAllOrders(order.Order.OrderDate);
+            if (orders.Count == 1)
+            {
+                File.Delete(filePath);
+            }
+            else
+            {
+                orders.Remove(order.Order);
+                using (var writer = File.CreateText(filePath))
+                {
+                    writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                    foreach (var newo in orders)
+                    {
+                        writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", newo.OrderNumber,
+                       newo.CustomerName, newo.State, newo.TaxRate, newo.ProductType.ProductType, newo.Area,
+                       newo.ProductType.MaterialCost, newo.ProductType.LaborCost, newo.MaterialCost, newo.LaborCost, newo.Tax,
+                       newo.Total);
+                    }
+                }
+            }
+
         }
 
     }

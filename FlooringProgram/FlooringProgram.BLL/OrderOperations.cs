@@ -58,13 +58,38 @@ namespace FlooringProgram.BLL
             {
                 response.Success = true;
                 response.Order = newOrder;
+                return response;
+            }
+            //else
+            //{
+            //    response.Success = false;
+            //    response.Message = "There was a problem with creating your order";
+            //    return response;
+            //}
+            
+        }
+
+        public Response RemoveOrder(int orderDate, int orderNumber)
+        {
+            var repo = new OrderRepository();
+            var currentOrder = repo.CheckForOrder(orderDate, orderNumber);
+
+            var response = new Response();
+            if (currentOrder != null)
+            {
+                response.Success = true;
+                response.Message = "We found an order matching that data.";
+                response.Order = currentOrder;
+                return response;
             }
             else
             {
                 response.Success = false;
-                response.Message = "There was a problem with creating your order";
+                response.Message = "We did not find an order matching that data.";
+                return response;
             }
-            return response;
+
+
         }
 
         public void PassAddToData(Response OrderInfo)
@@ -76,6 +101,15 @@ namespace FlooringProgram.BLL
 
             //this method actually writes the order data on the file
             or.WriteLine(BLLOrder);
+        }
+
+        public void PassRemoveFromData(Response response)
+        {
+            var BLLRemoveOrder = new Response();
+            BLLRemoveOrder = response;
+
+            var repo = new OrderRepository();
+            repo.DeleteOrder(BLLRemoveOrder);
         }
     }
 }
