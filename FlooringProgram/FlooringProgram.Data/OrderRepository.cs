@@ -20,6 +20,7 @@ namespace FlooringProgram.Data
 
             List<Order> orders = new List<Order>();
 
+            //need to check if filepath is null!!
             var reader = File.ReadAllLines(_filePath);
 
             for (int i = 1; i < reader.Length; i++)
@@ -123,6 +124,18 @@ namespace FlooringProgram.Data
                 return orders.Count + 1;
             }
             return 1;
+        }
+
+        public void WriteLine(Response OrderInfo)
+        {
+            using (var writer = File.AppendText(String.Format(@"DataFiles\Orders_{0}", OrderInfo.Order.OrderDate)))
+            {
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderInfo.Order.OrderNumber,
+                    OrderInfo.Order.CustomerName, OrderInfo.Order.State,
+                    OrderInfo.Order.TaxRate, OrderInfo.Order.ProductType.ProductType, OrderInfo.Order.Area,
+                    OrderInfo.Order.ProductType.MaterialCost, OrderInfo.Order.ProductType.LaborCost,
+                    OrderInfo.Order.MaterialCost, OrderInfo.Order.LaborCost, OrderInfo.Order.Tax, OrderInfo.Order.Total);
+            }
         }
 
     }

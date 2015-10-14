@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FlooringProgram.BLL;
+using FlooringProgram.Models;
 
 namespace FlooringProgram.UI.WorkFlow
 {
@@ -117,7 +118,7 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 Console.Clear();
-                Console.Write("Please enter the area needed : ");
+                Console.Write("Please enter the area needed (sq ft) : ");
                 decimal area = decimal.Parse(Console.ReadLine());
 
                 if (area > 0)
@@ -148,21 +149,61 @@ namespace FlooringProgram.UI.WorkFlow
 
             if (response.Success)
             {
-                Console.WriteLine(
-                    "Name : {0}\nState : {1}\nOrder Number : {2}\nArea : {3}\nProduct type : {4}\nMaterial cost per sq ft : {5:c}\nLabor cost per sq ft : {6:c}\nState Tax : {7:P}\nTotal Material Cost : {8:c}\nTotal Labor Cost : {9:c}\nTotal Tax : {10:c}\nTotal Cost : {11:c}",
-                    response.Order.CustomerName, response.Order.State, response.Order.OrderNumber, response.Order.Area,
-                    response.Order.ProductType.ProductType, response.Order.ProductType.MaterialCost,
-                    response.Order.ProductType.LaborCost, response.Order.TaxRate/100, response.Order.MaterialCost,
-                    response.Order.LaborCost, response.Order.Tax, response.Order.Total);
+                Console.Clear();
+                Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.ToString().Substring(0,2), response.Order.OrderDate.ToString().Substring(2,2), response.Order.OrderDate.ToString().Substring(4));
+                Console.WriteLine("Order number {0:0000}", response.Order.OrderNumber);
+                Console.WriteLine("\nCustomer name : {0}", response.Order.CustomerName);
+                Console.WriteLine("Area : {0} sq ft", response.Order.Area);
+                Console.WriteLine("Product type : {0}", response.Order.ProductType.ProductType);
+                Console.WriteLine("Material cost per sq ft : {0:c}", response.Order.ProductType.MaterialCost);
+                Console.WriteLine("Labor cost per sq ft : {0:c}", response.Order.ProductType.LaborCost);
+                Console.WriteLine("Total material cost : {0:c}", response.Order.MaterialCost);
+                Console.WriteLine("Total labor cost : {0:c}", response.Order.LaborCost);
+                Console.WriteLine("{0} state tax ({1:p}) : {2:c}", response.Order.State, response.Order.TaxRate/100,
+                    response.Order.Tax);
+                Console.WriteLine("\nOrder total : {0:c}", response.Order.Total);
+                Console.WriteLine();
+                Console.WriteLine();
 
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.Write("Are you sure you want to add this order?");
-                string input = Console.ReadLine();
+                ConfirmUserCommit(response);
 
                 //method to take this input and use it to either write on the data or not
             }
+            if (!response.Success)
+            {
+                Console.Clear();
+                Console.WriteLine("There was an error");
+                Console.WriteLine("Press enter to return to main menu");
+                Console.ReadLine();
+            }
+        }
+
+        public void ConfirmUserCommit(Response OrderInfo)
+        {
+            Console.Write("Do you want to commit these changes to memory (y/n) ? : ");
+            string input = Console.ReadLine();
+
+            if (input.ToUpper() == "Y" || input.ToUpper() == "YES")
+            {
+                var ops = new OrderOperations();
+
+                var UIOrder = new Response();
+                UIOrder = OrderInfo;
+
+                // this method will pass order info to the BLL
+                ops.PassAddToData(UIOrder);
+                Console.WriteLine("Your order has been saved successfully!");
+                Console.WriteLine("Press enter to return to main menu");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("Changes not saved!");
+                Console.WriteLine("Press enter to return to main menu");
+                Console.ReadLine();
+            }
+
+
         }
     }
 }

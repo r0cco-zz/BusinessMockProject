@@ -36,9 +36,10 @@ namespace FlooringProgram.BLL
         {
             var repo = new OrderRepository(); //change to interface type later
             Order newOrder = new Order();
-            newOrder.CustomerName = customerName;
+            newOrder.CustomerName = customerName; //clean these calculations up (possibly new method?)
             newOrder.Area = area;
             newOrder.OrderNumber = repo.GetOrderNumber(orderDate);
+            newOrder.OrderDate = orderDate;
             newOrder.ProductType = repo.GetProduct(productType);
             var currentState = repo.GetState(state);
             newOrder.State = currentState.StateAbb;
@@ -64,6 +65,17 @@ namespace FlooringProgram.BLL
                 response.Message = "There was a problem with creating your order";
             }
             return response;
+        }
+
+        public void PassAddToData(Response OrderInfo)
+        {
+            var BLLOrder = new Response();
+            BLLOrder = OrderInfo;
+
+            var or = new OrderRepository();
+
+            //this method actually writes the order data on the file
+            or.WriteLine(BLLOrder);
         }
     }
 }

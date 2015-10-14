@@ -20,5 +20,6 @@ namespace FlooringProgram.Models
         public decimal LaborCost { get; set; }
         public decimal Tax { get; set; }
         public decimal Total { get; set; }
+        public int OrderDate { get; set; }
     }
 }
