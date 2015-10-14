@@ -35,7 +35,7 @@ namespace FlooringProgram.UI.WorkFlow
                     return orderDate;
                 }
 
-                Console.WriteLine("That was not a valid order date.");
+                Console.WriteLine("No orders found for that date.");
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
 
@@ -62,8 +62,8 @@ namespace FlooringProgram.UI.WorkFlow
         {
             foreach (var order in orderList)
             {
-                Console.WriteLine("Order Information");
-                Console.WriteLine("\t{0}, {1}\n", order.CustomerName, order.Total);
+                Console.WriteLine("Order number {0}", order.OrderNumber);
+                Console.WriteLine("\t{0}, Total : {1}\n", order.CustomerName, order.Total);
             }
 
             Console.WriteLine("Press enter to continue");

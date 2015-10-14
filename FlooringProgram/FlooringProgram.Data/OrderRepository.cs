@@ -128,9 +128,9 @@ namespace FlooringProgram.Data
 
         public void WriteLine(Response OrderInfo)
         {
-            using (var writer = File.AppendText(String.Format(@"DataFiles\Orders_{0}", OrderInfo.Order.OrderDate)))
+            using (var writer = File.AppendText(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate)))
             {
-                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderInfo.Order.OrderNumber,
+                writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderInfo.Order.OrderNumber,
                     OrderInfo.Order.CustomerName, OrderInfo.Order.State,
                     OrderInfo.Order.TaxRate, OrderInfo.Order.ProductType.ProductType, OrderInfo.Order.Area,
                     OrderInfo.Order.ProductType.MaterialCost, OrderInfo.Order.ProductType.LaborCost,
