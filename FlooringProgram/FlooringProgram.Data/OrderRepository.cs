@@ -121,7 +121,6 @@ namespace FlooringProgram.Data
             if (!alreadyOrder)
             {
                 var orders = GetAllOrders(orderDate);
-                return orders.Count + 1;
             }
             return 1;
         }
