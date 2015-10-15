@@ -50,10 +50,14 @@ namespace FlooringProgram.UI.WorkFlow
                         Console.Write("That is not the current date.  Would you like to continue (y/n) : ");
                         input = Console.ReadLine().ToUpper();
                         if (input == "Y")
+                        {
                             return orderDate;
+                        }
+                        else
+                        {
+                            return 1;
+                        }
                     }
-                    return orderDate;
-                    
                 }
 
                 Console.WriteLine("Please Enter a valid date in MMDDYY format (no other characters)");
@@ -119,7 +123,7 @@ namespace FlooringProgram.UI.WorkFlow
                 switch (productType.ToUpper())
                 {
                     case "CARPET":
-                       
+
 
                     case "LAMINATE":
                     case "TILE":
@@ -133,7 +137,7 @@ namespace FlooringProgram.UI.WorkFlow
 
                 }
 
-                
+
 
             } while (true);
         }
@@ -146,8 +150,10 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Clear();
                 Console.Write("Please enter the area needed (sq ft) : ");
                 if (decimal.TryParse((Console.ReadLine()), out area) && area > 0)
-                { return area;}
-                
+                {
+                    return area;
+                }
+
                 Console.WriteLine("Please Enter a valid area value");
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
@@ -158,46 +164,52 @@ namespace FlooringProgram.UI.WorkFlow
         public void DisplayOrderInfo()
         {
             int orderDate = GetDateFromUser();
-            string customerName = "";
-            customerName = GetCustomerNameFromUser();
-            string state = GetStateFromUser();
-            string productType = "";
-            productType = GetProductTypeFromUser();
-            decimal area = 0;
-            area = GetAreaFromUser();
 
-            var ops = new OrderOperations();
-
-            var response = ops.AddOrder(orderDate, customerName, state, productType, area);
-
-            if (response.Success)
+            if (orderDate != 1)
             {
-                Console.Clear();
-                Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.ToString().Substring(0,2), response.Order.OrderDate.ToString().Substring(2,2), response.Order.OrderDate.ToString().Substring(4));
-                Console.WriteLine("Order number {0:0000}", response.Order.OrderNumber);
-                Console.WriteLine("\nCustomer name : {0}", response.Order.CustomerName);
-                Console.WriteLine("Area : {0} sq ft", response.Order.Area);
-                Console.WriteLine("Product type : {0}", response.Order.ProductType.ProductType);
-                Console.WriteLine("Material cost per sq ft : {0:c}", response.Order.ProductType.MaterialCost);
-                Console.WriteLine("Labor cost per sq ft : {0:c}", response.Order.ProductType.LaborCost);
-                Console.WriteLine("Total material cost : {0:c}", response.Order.MaterialCost);
-                Console.WriteLine("Total labor cost : {0:c}", response.Order.LaborCost);
-                Console.WriteLine("{0} state tax ({1:p}) : {2:c}", response.Order.State, response.Order.TaxRate/100,
-                    response.Order.Tax);
-                Console.WriteLine("\nOrder total : {0:c}", response.Order.Total);
-                Console.WriteLine();
-                Console.WriteLine();
+                string customerName = "";
+                customerName = GetCustomerNameFromUser();
+                string state = GetStateFromUser();
+                string productType = "";
+                productType = GetProductTypeFromUser();
+                decimal area = 0;
+                area = GetAreaFromUser();
 
-                ConfirmUserCommit(response);
+                var ops = new OrderOperations();
 
-                //method to take this input and use it to either write on the data or not
-            }
-            if (!response.Success)
-            {
-                Console.Clear();
-                Console.WriteLine("There was an error");
-                Console.WriteLine("Press enter to return to main menu");
-                Console.ReadLine();
+                var response = ops.AddOrder(orderDate, customerName, state, productType, area);
+
+                if (response.Success)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.ToString().Substring(0, 2),
+                        response.Order.OrderDate.ToString().Substring(2, 2),
+                        response.Order.OrderDate.ToString().Substring(4));
+                    Console.WriteLine("Order number {0:0000}", response.Order.OrderNumber);
+                    Console.WriteLine("\nCustomer name : {0}", response.Order.CustomerName);
+                    Console.WriteLine("Area : {0} sq ft", response.Order.Area);
+                    Console.WriteLine("Product type : {0}", response.Order.ProductType.ProductType);
+                    Console.WriteLine("Material cost per sq ft : {0:c}", response.Order.ProductType.MaterialCost);
+                    Console.WriteLine("Labor cost per sq ft : {0:c}", response.Order.ProductType.LaborCost);
+                    Console.WriteLine("Total material cost : {0:c}", response.Order.MaterialCost);
+                    Console.WriteLine("Total labor cost : {0:c}", response.Order.LaborCost);
+                    Console.WriteLine("{0} state tax ({1:p}) : {2:c}", response.Order.State, response.Order.TaxRate/100,
+                        response.Order.Tax);
+                    Console.WriteLine("\nOrder total : {0:c}", response.Order.Total);
+                    Console.WriteLine();
+                    Console.WriteLine();
+
+                    ConfirmUserCommit(response);
+
+                    //method to take this input and use it to either write on the data or not
+                }
+                if (!response.Success)
+                {
+                    Console.Clear();
+                    Console.WriteLine("There was an error");
+                    Console.WriteLine("Press enter to return to main menu");
+                    Console.ReadLine();
+                }
             }
         }
 
