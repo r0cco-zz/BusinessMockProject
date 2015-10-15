@@ -8,6 +8,7 @@ using FlooringProgram.Models;
 using FlooringProgram.Data;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace FlooringProgram.Data
 {
@@ -36,18 +37,25 @@ namespace FlooringProgram.Data
                 order.ProductType = new ProductTypes();
 
                 order.OrderNumber = int.Parse(columns[0]);
-                order.CustomerName = columns[1];
-                order.State = columns[2];
-                order.TaxRate = decimal.Parse(columns[3]);
-                order.ProductType.ProductType = (columns[4]);
-                order.Area = decimal.Parse(columns[5]);
-                order.ProductType.MaterialCost = decimal.Parse(columns[6]);
-                order.ProductType.LaborCost = decimal.Parse(columns[7]);
-                order.MaterialCost = decimal.Parse(columns[8]);
-                order.LaborCost = decimal.Parse(columns[9]);
-                order.Tax = decimal.Parse(columns[10]);
-                order.Total = decimal.Parse(columns[11]);
+
+                for (int j = 1; j < columns.Count()-10; j++)
+                {
+                    order.CustomerName += columns[j];
+                }
+
+                order.State = columns[columns.Count()-10];
+                order.TaxRate = decimal.Parse(columns[columns.Count()-9]);
+                order.ProductType.ProductType = (columns[columns.Count()-8]);
+                order.Area = decimal.Parse(columns[columns.Count()-7]);
+                order.ProductType.MaterialCost = decimal.Parse(columns[columns.Count()-6]);
+                order.ProductType.LaborCost = decimal.Parse(columns[columns.Count()-5]);
+                order.MaterialCost = decimal.Parse(columns[columns.Count()-4]);
+                order.LaborCost = decimal.Parse(columns[columns.Count()-3]);
+                order.Tax = decimal.Parse(columns[columns.Count()-2]);
+                order.Total = decimal.Parse(columns[columns.Count()-1]);
+
                 order.OrderDate = int.Parse(_filePath.Substring(17, 8));
+
                 orders.Add(order);
             }
 

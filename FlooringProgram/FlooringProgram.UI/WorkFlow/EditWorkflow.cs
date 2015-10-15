@@ -26,9 +26,12 @@ namespace FlooringProgram.UI.WorkFlow
                     Response ultimateEdit = DisplayOrder(response);
                     FinalDisplay(ultimateEdit);
                 }
-                Console.WriteLine("Sorry, there was no order found matching that data...");
-                Console.WriteLine("Press enter to return to the main menu...");
-                Console.ReadLine();
+                else
+                {
+                    Console.WriteLine("Sorry, there was no order found matching that data...");
+                    Console.WriteLine("Press enter to return to the main menu...");
+                    Console.ReadLine();
+                }
             }
         }
 
@@ -47,6 +50,7 @@ namespace FlooringProgram.UI.WorkFlow
                 bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
                 if (int.TryParse(orderDateString, out orderDate) && orderDate.ToString().Length == 8 && doesExist)
                 {
+                    DisplayAllOrdersFromDate(orderDate);
                     return orderDate;
                 }
 
@@ -66,10 +70,11 @@ namespace FlooringProgram.UI.WorkFlow
         {
             do
             {
-                Console.Clear();
+                //Console.Clear();
                 string orderNumberString;
                 int orderNumber;
-                Console.Write("Enter an order number to search for : ");
+
+                Console.Write("Enter an order number to edit : ");
                 orderNumberString = Console.ReadLine();
                 //bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
                 if (int.TryParse(orderNumberString, out orderNumber))
@@ -249,6 +254,30 @@ namespace FlooringProgram.UI.WorkFlow
             else
             {
                 Console.WriteLine("No changes will be made to this order.");
+                Console.WriteLine("Press enter to return to main menu");
+                Console.ReadLine();
+            }
+        }
+
+        public void DisplayAllOrdersFromDate(int orderDate)
+        {
+            OrderOperations ops = new OrderOperations();
+            var response = ops.GetAllOrdersFromDate(orderDate);
+
+            if (response.Success)
+            {
+                foreach (var order in response.OrderList)
+                {
+                    Console.WriteLine("Order number {0}", order.OrderNumber);
+                    Console.WriteLine("\t{0}, Total : {1:c}\n", order.CustomerName, order.Total);
+                }
+
+
+            }
+            if (!response.Success)
+            {
+                Console.Clear();
+                Console.WriteLine("There was an error");
                 Console.WriteLine("Press enter to return to main menu");
                 Console.ReadLine();
             }

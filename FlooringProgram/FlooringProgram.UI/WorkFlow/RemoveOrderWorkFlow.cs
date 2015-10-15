@@ -14,6 +14,9 @@ namespace FlooringProgram.UI.WorkFlow
         public void Execute()
         {
             int orderDateRemove = GetOrderDateFromUser();
+
+            DisplayAllOrdersFromDate(orderDateRemove);
+
             int orderNumberRemove = GetOrderNumberFromUser();
             var ops = new OrderOperations();
             var response = ops.RemoveOrder(orderDateRemove, orderNumberRemove);
@@ -45,7 +48,7 @@ namespace FlooringProgram.UI.WorkFlow
         {
             do
             {
-                Console.Clear();
+                //Console.Clear();
                 string orderNumberString;
                 int orderNumber;
                 Console.Write("Enter an order number to search for : ");
@@ -125,6 +128,28 @@ namespace FlooringProgram.UI.WorkFlow
 
         }
 
+        public void DisplayAllOrdersFromDate(int orderDate)
+        {
+            OrderOperations ops = new OrderOperations();
+            var response = ops.GetAllOrdersFromDate(orderDate);
 
+            if (response.Success)
+            {
+                foreach (var order in response.OrderList)
+                {
+                    Console.WriteLine("Order number {0}", order.OrderNumber);
+                    Console.WriteLine("\t{0}, Total : {1:c}\n", order.CustomerName, order.Total);
+                }
+
+
+            }
+            if (!response.Success)
+            {
+                Console.Clear();
+                Console.WriteLine("There was an error");
+                Console.WriteLine("Press enter to return to main menu");
+                Console.ReadLine();
+            }
+        }
     }
 }
