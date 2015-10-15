@@ -40,7 +40,7 @@ namespace FlooringProgram.BLL
             newOrder.Area = area;
             newOrder.OrderNumber = repo.GetOrderNumber(orderDate);
             newOrder.OrderDate = orderDate;
-            newOrder.ProductType = repo.GetProduct(productType);
+            newOrder.ProductType = repo.GetProduct(productType.Substring(0,1).ToUpper() + productType.Substring(1).ToLower());
             var currentState = repo.GetState(state);
             newOrder.State = currentState.StateAbb;
             newOrder.TaxRate = currentState.TaxRate;

@@ -43,7 +43,17 @@ namespace FlooringProgram.UI.WorkFlow
 
                 if (int.TryParse((Console.ReadLine()), out orderDate) && orderDate.ToString().Length == 8)
                 {
+                    var date1 = DateTime.Now;
+                    if (orderDate.ToString() != date1.ToString("MMddyyyy"))
+                    {
+                        var input = "";
+                        Console.Write("That is not the current date.  Would you like to continue (y/n) : ");
+                        input = Console.ReadLine().ToUpper();
+                        if (input == "Y")
+                            return orderDate;
+                    }
                     return orderDate;
+                    
                 }
 
                 Console.WriteLine("Please Enter a valid date in MMDDYY format (no other characters)");
@@ -78,17 +88,22 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 Console.Clear();
-                Console.Write("Please enter the state (2 letter abbr.) where the customer is located : ");
+                Console.Write("Please choose a state (OH, PA, MI, or IN) : ");
                 string state = Console.ReadLine().ToUpper();
 
-                if (state != "" && state.Length == 2)
+                switch (state)
                 {
-                    return state;
+                    case "OH":
+                    case "PA":
+                    case "MI":
+                    case "IN":
+                        return state;
+                    default:
+                        Console.WriteLine("Please enter a valid state abbreviation (from the list provided!)");
+                        Console.WriteLine("Press enter to continue");
+                        Console.ReadLine();
+                        break;
                 }
-
-                Console.WriteLine("Please Enter the state (2 letter abbr.) where the customer is located.");
-                Console.WriteLine("Press enter to continue");
-                Console.ReadLine();
 
             } while (true);
         }
@@ -98,17 +113,27 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 Console.Clear();
-                Console.Write("Please enter the product type : ");
+                Console.Write("Please enter the product type (Carpet, Laminate, Tile, Wood) : ");
                 string productType = Console.ReadLine();
 
-                if (productType != "")
+                switch (productType.ToUpper())
                 {
-                    return productType;
+                    case "CARPET":
+                       
+
+                    case "LAMINATE":
+                    case "TILE":
+                    case "WOOD":
+                        return productType;
+                    default:
+                        Console.WriteLine("Please choose a valid product type");
+                        Console.WriteLine("Press enter to continue");
+                        Console.ReadLine();
+                        break;
+
                 }
 
-                Console.WriteLine("Please Enter a valid product type");
-                Console.WriteLine("Press enter to continue");
-                Console.ReadLine();
+                
 
             } while (true);
         }
@@ -117,15 +142,12 @@ namespace FlooringProgram.UI.WorkFlow
         {
             do
             {
+                decimal area;
                 Console.Clear();
                 Console.Write("Please enter the area needed (sq ft) : ");
-                decimal area = decimal.Parse(Console.ReadLine());
-
-                if (area > 0)
-                {
-                    return area;
-                }
-
+                if (decimal.TryParse((Console.ReadLine()), out area) && area > 0)
+                { return area;}
+                
                 Console.WriteLine("Please Enter a valid area value");
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
@@ -139,7 +161,8 @@ namespace FlooringProgram.UI.WorkFlow
             string customerName = "";
             customerName = GetCustomerNameFromUser();
             string state = GetStateFromUser();
-            string productType = GetProductTypeFromUser();
+            string productType = "";
+            productType = GetProductTypeFromUser();
             decimal area = 0;
             area = GetAreaFromUser();
 

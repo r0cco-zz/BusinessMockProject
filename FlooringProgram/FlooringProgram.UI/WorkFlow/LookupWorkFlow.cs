@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FlooringProgram.BLL;
 using FlooringProgram.Models;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
 
 namespace FlooringProgram.UI.WorkFlow
 {
@@ -16,15 +17,20 @@ namespace FlooringProgram.UI.WorkFlow
         public void Execute()
         {
             int orderDate = GetOrderDateFromUser();
-            DisplayOrdersFromDate(orderDate);
+            if (orderDate != 1)
+            {
+                DisplayOrdersFromDate(orderDate);
+            }
+           
         }
 
         public int GetOrderDateFromUser()
         {
+            string input = "";
             do
             {
                 Console.Clear();
-                string orderDateString;
+                string orderDateString = "";
                 int orderDate;
                 Console.Write("Enter an date in MMDDYYYY format (no other characters) : ");
                 orderDateString = Console.ReadLine();
@@ -34,13 +40,20 @@ namespace FlooringProgram.UI.WorkFlow
                 {
                     return orderDate;
                 }
+                
 
-                Console.WriteLine("No orders found for that date.");
-                Console.WriteLine("Press enter to continue");
-                Console.ReadLine();
+                Console.WriteLine("Either that is not a valid date, or there are no matching orders.");
+                Console.WriteLine("Press enter to continue, or (M)ain Menu...");
+                input = Console.ReadLine().ToUpper();
 
+                if (input.ToUpper() == "M")
+                {
+                    return 1;
+                }
             } while (true);
+            
         }
+        
 
         public void DisplayOrdersFromDate(int orderDate)
         {

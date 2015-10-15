@@ -184,7 +184,7 @@ namespace FlooringProgram.UI.WorkFlow
 
         public void FinalDisplay(Response response)
         {
-            if (response.Success)
+            if (response.Success && response != null)
             {
                 Console.Clear();
                 Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.ToString().Substring(0, 2),
@@ -207,7 +207,7 @@ namespace FlooringProgram.UI.WorkFlow
 
                 //method to take this input and use it to either write on the data or not
             }
-            if (!response.Success)
+            if (!response.Success || response == null)
             {
                 Console.Clear();
                 Console.WriteLine("There was an error");

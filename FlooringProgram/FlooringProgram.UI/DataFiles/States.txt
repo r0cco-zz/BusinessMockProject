@@ -1,5 +1,0 @@
-﻿StateAbbreviation,StateName,TaxRate
-OH,Ohio,6.25
-IN,Indiana,7.00
-FL,Florida,6.00
-TX,Texas,6.25

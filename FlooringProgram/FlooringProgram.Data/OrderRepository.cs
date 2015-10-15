@@ -57,7 +57,7 @@ namespace FlooringProgram.Data
         public List<ProductTypes> GetProducts()
         {
 
-            string _filePath = @"DataFiles\ProductTypes.txt";
+            string _filePath = @"DataFiles\Products.txt";
 
 
             List<ProductTypes> products = new List<ProductTypes>();
@@ -88,7 +88,7 @@ namespace FlooringProgram.Data
 
         public List<StateInfo> GetStates()
         {
-            string _filePath = @"DataFiles\States.txt";
+            string _filePath = @"DataFiles\Taxes.txt";
 
             List<StateInfo> states = new List<StateInfo>();
 
