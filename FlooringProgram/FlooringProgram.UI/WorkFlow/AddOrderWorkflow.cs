@@ -46,7 +46,7 @@ namespace FlooringProgram.UI.WorkFlow
                     return orderDate;
                 }
 
-                Console.WriteLine("Please Enter customer name (customer names must be at least two characters).");
+                Console.WriteLine("Please Enter a valid date in MMDDYY format (no other characters)");
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
 
@@ -66,7 +66,7 @@ namespace FlooringProgram.UI.WorkFlow
                     return customerName;
                 }
 
-                Console.WriteLine("Please Enter customer name (customer names must be at least two characters).");
+                Console.WriteLine("Please Enter a valid customer name (customer names must be at least two characters).");
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
 
@@ -79,14 +79,14 @@ namespace FlooringProgram.UI.WorkFlow
             {
                 Console.Clear();
                 Console.Write("Please enter the state (2 letter abbr.) where the customer is located : ");
-                string state = Console.ReadLine();
+                string state = Console.ReadLine().ToUpper();
 
                 if (state != "" && state.Length == 2)
                 {
                     return state;
                 }
 
-                Console.WriteLine("Please Enter the state the customer is located.");
+                Console.WriteLine("Please Enter the state (2 letter abbr.) where the customer is located.");
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
 
