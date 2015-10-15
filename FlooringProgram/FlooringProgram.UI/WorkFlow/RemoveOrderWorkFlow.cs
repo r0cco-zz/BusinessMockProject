@@ -91,7 +91,7 @@ namespace FlooringProgram.UI.WorkFlow
             if (!response.Success)
             {
                 Console.Clear();
-                Console.WriteLine("There was an error");
+                Console.WriteLine("There were no orders matching that data...");
                 Console.WriteLine("Press enter to return to main menu");
                 Console.ReadLine();
             }
