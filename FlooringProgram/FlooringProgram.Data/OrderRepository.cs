@@ -13,7 +13,7 @@ namespace FlooringProgram.Data
 {
     public class OrderRepository : IOrderRepository
     {
-        public List<Order> GetAllOrders(int orderDate)
+        public List<Order> GetAllOrders(string orderDate)
         {
             string _filePath = String.Format(@"DataFiles\Orders_{0}.txt", orderDate); // gonna change for more files
 
@@ -47,7 +47,7 @@ namespace FlooringProgram.Data
                 order.LaborCost = decimal.Parse(columns[9]);
                 order.Tax = decimal.Parse(columns[10]);
                 order.Total = decimal.Parse(columns[11]);
-                order.OrderDate = int.Parse(_filePath.Substring(17, 8));
+                order.OrderDate = _filePath.Substring(17, 8);
                 orders.Add(order);
             }
 
@@ -120,7 +120,7 @@ namespace FlooringProgram.Data
             return null;
         }
 
-        public int GetOrderNumber(int orderDate)
+        public int GetOrderNumber(string orderDate)
         {
             bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDate));
             if (alreadyOrder)
@@ -173,7 +173,7 @@ namespace FlooringProgram.Data
             }
         }
 
-        public Order CheckForOrder(int orderDate, int orderNumber)
+        public Order CheckForOrder(string orderDate, int orderNumber)
         {
             string filePath = (String.Format(@"DataFiles\Orders_{0}.txt", orderDate));
             bool alreadyOrder = File.Exists(filePath);

@@ -13,25 +13,25 @@ namespace FlooringProgram.UI.WorkFlow
     {
         public void Execute()
         {
-            int orderDateRemove = GetOrderDateFromUser();
+            string orderDateRemove = GetOrderDateFromUser();
             int orderNumberRemove = GetOrderNumberFromUser();
             var ops = new OrderOperations();
             var response = ops.RemoveOrder(orderDateRemove, orderNumberRemove);
             DisplayOrder(response);
         }
 
-        public int GetOrderDateFromUser()
+        public string GetOrderDateFromUser()
         {
             do
             {
                 Console.Clear();
                 string orderDateString;
-                int orderDate;
+                DateTime orderDate;
                 Console.Write("Enter a date in MMDDYYYY format (no other characters) : ");
                 orderDateString = Console.ReadLine();
-                if (int.TryParse(orderDateString, out orderDate) && orderDate.ToString().Length == 8)
+                if (DateTime.TryParse(orderDateString, out orderDate))
                 {
-                    return orderDate;
+                    return orderDate.ToString("MMddyyyy");
                 }
 
                 Console.WriteLine("Please enter a date in MMDDYYYY format.");

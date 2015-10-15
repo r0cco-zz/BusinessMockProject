@@ -16,46 +16,46 @@ namespace FlooringProgram.UI.WorkFlow
 
         public void Execute()
         {
-            int orderDate = GetOrderDateFromUser();
-            if (orderDate != 1)
+            string orderDate = GetOrderDateFromUser();
+            if (orderDate != "X")
             {
                 DisplayOrdersFromDate(orderDate);
             }
            
         }
 
-        public int GetOrderDateFromUser()
+        public string GetOrderDateFromUser()
         {
             string input = "";
             do
             {
                 Console.Clear();
                 string orderDateString = "";
-                int orderDate;
-                Console.Write("Enter an date in MMDDYYYY format (no other characters) : ");
+                DateTime orderDate;
+                Console.Write("Enter an order date: ");
                 orderDateString = Console.ReadLine();
-                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
-                if (int.TryParse(orderDateString, out orderDate) && orderDate.ToString().Length == 8
-                    && doesExist)
+                bool validDate = DateTime.TryParse(orderDateString, out orderDate);
+                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDate.ToString("MMddyyyy")));
+                if (doesExist && validDate)
                 {
-                    return orderDate;
+                    return orderDate.ToString("MMddyyyy");
                 }
-                
-
-                Console.WriteLine("Either that is not a valid date, or there are no matching orders.");
+                if (!validDate)
+                    Console.WriteLine("That does not look like a valid date...");
+                if (validDate && !doesExist)
+                Console.WriteLine("There are no matching orders...");
                 Console.WriteLine("Press enter to continue, or (M)ain Menu...");
                 input = Console.ReadLine().ToUpper();
-
                 if (input.ToUpper() == "M")
                 {
-                    return 1;
+                    return "X";
                 }
             } while (true);
             
         }
         
 
-        public void DisplayOrdersFromDate(int orderDate)
+        public void DisplayOrdersFromDate(string orderDate)
         {
             var ops = new OrderOperations();
             var response = ops.GetAllOrdersFromDate(orderDate);

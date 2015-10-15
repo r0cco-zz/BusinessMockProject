@@ -10,7 +10,7 @@ namespace FlooringProgram.Data
 {
     public class ProdOrderRepository : IOrderRepository
     {
-        public List<Order> GetAllOrders(int orderDate)
+        public List<Order> GetAllOrders(string orderDate)
         {
             string _filePath = String.Format(@"DataFiles\Orders_{0}.txt", orderDate);  // gonna change for more files
 

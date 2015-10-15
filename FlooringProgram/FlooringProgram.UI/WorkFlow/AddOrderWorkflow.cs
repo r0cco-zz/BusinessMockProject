@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,40 +33,51 @@ namespace FlooringProgram.UI.WorkFlow
             //ask user if they want to save
         }
 
-        public int GetDateFromUser()
+        public string GetDateFromUser()
         {
+            string input = "";
             do
             {
+                string inputContinue = "";
+                var date = DateTime.Now;
                 Console.Clear();
-                Console.Write("Please enter order date (as MMDDYYYY) : ");
-                int orderDate;
-
-
-                if (int.TryParse((Console.ReadLine()), out orderDate) && orderDate.ToString().Length == 8)
+                string orderDateString = "";
+                DateTime orderDate;
+                Console.Write("Enter an order date: ");
+                orderDateString = Console.ReadLine();
+                bool validDate = DateTime.TryParse(orderDateString, out orderDate);
+                if (validDate)
                 {
-                    var date1 = DateTime.Now;
-                    if (orderDate.ToString() != date1.ToString("MMddyyyy"))
+                    if (orderDate.ToString("MMddyyyy") == date.ToString("MMddyyyy"))
+                        return orderDate.ToString("MMddyyyy");
+                    if (orderDate.ToString("MMddyyyy") != date.ToString("MMddyyyy"))
                     {
-                        var input = "";
-                        Console.Write("That is not the current date.  Would you like to continue (y/n) : ");
-                        input = Console.ReadLine().ToUpper();
-                        if (input == "Y")
-                        {
-                            return orderDate;
-                        }
-                        else
-                        {
-                            return 1;
-                        }
+                        Console.Write("That is not today's date; would you like to continue (y/n) ? : ");
+                        inputContinue = Console.ReadLine();
+                        if (inputContinue.ToUpper() == "Y")
+                            return orderDate.ToString("MMddyyyy");
+                        if (inputContinue.ToUpper() == "N")
+                            return "X";
                     }
                 }
-
-                Console.WriteLine("Please Enter a valid date in MMDDYY format (no other characters)");
-                Console.WriteLine("Press enter to continue");
-                Console.ReadLine();
-
+                if (!validDate)
+                    Console.WriteLine("That does not look like a valid date...");
+                Console.WriteLine("Press enter to continue, or (M)ain Menu...");
+                input = Console.ReadLine().ToUpper();
+                if (input.ToUpper() == "M")
+                {
+                    return "X";
+                }
             } while (true);
+
         }
+
+        //Console.WriteLine("Please Enter a valid date in MMDDYY format (no other characters)");
+        //Console.WriteLine("Press enter to continue");
+        //Console.ReadLine();
+
+
+
 
         public string GetCustomerNameFromUser()
         {
@@ -163,9 +175,9 @@ namespace FlooringProgram.UI.WorkFlow
 
         public void DisplayOrderInfo()
         {
-            int orderDate = GetDateFromUser();
+            string orderDate = GetDateFromUser();
+            if (orderDate != "X")
 
-            if (orderDate != 1)
             {
                 string customerName = "";
                 customerName = GetCustomerNameFromUser();
@@ -182,9 +194,9 @@ namespace FlooringProgram.UI.WorkFlow
                 if (response.Success)
                 {
                     Console.Clear();
-                    Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.ToString().Substring(0, 2),
-                        response.Order.OrderDate.ToString().Substring(2, 2),
-                        response.Order.OrderDate.ToString().Substring(4));
+                    Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.Substring(0, 2),
+                        response.Order.OrderDate.Substring(2, 2),
+                        response.Order.OrderDate.Substring(4));
                     Console.WriteLine("Order number {0:0000}", response.Order.OrderNumber);
                     Console.WriteLine("\nCustomer name : {0}", response.Order.CustomerName);
                     Console.WriteLine("Area : {0} sq ft", response.Order.Area);

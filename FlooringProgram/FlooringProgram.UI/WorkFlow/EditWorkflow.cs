@@ -13,8 +13,8 @@ namespace FlooringProgram.UI.WorkFlow
     {
         public void Execute()
         {
-            int orderDate = GetOrderDateFromUser();
-            if (orderDate != 1)
+            string orderDate = GetOrderDateFromUser();
+           
 
             {
                 int orderNumber = GetOrderNumberFromUser();
@@ -34,32 +34,34 @@ namespace FlooringProgram.UI.WorkFlow
 
 
 
-        public int GetOrderDateFromUser()
+        public string GetOrderDateFromUser()
         {
+            string input = "";
             do
             {
                 Console.Clear();
-                string input = "";
-                string orderDateString;
-                int orderDate;
-                Console.Write("Enter a date in MMDDYYYY format (no other characters) : ");
+                string orderDateString = "";
+                DateTime orderDate;
+                Console.Write("Enter an order date: ");
                 orderDateString = Console.ReadLine();
-                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
-                if (int.TryParse(orderDateString, out orderDate) && orderDate.ToString().Length == 8 && doesExist)
+                bool validDate = DateTime.TryParse(orderDateString, out orderDate);
+                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDate.ToString("MMddyyyy")));
+                if (doesExist && validDate)
                 {
-                    return orderDate;
+                    return orderDate.ToString("MMddyyyy");
                 }
-
-                Console.WriteLine("Either that is not a valid date, or there are no matching orders.");
+                if (!validDate)
+                    Console.WriteLine("That does not look like a valid date...");
+                if (validDate && !doesExist)
+                    Console.WriteLine("There are no matching orders...");
                 Console.WriteLine("Press enter to continue, or (M)ain Menu...");
                 input = Console.ReadLine().ToUpper();
-
                 if (input.ToUpper() == "M")
                 {
-                    return 1;
+                    return "X";
                 }
-
             } while (true);
+
         }
 
         public int GetOrderNumberFromUser()
@@ -187,20 +189,23 @@ namespace FlooringProgram.UI.WorkFlow
 
         public Response GetNewUserArea(Response orderInfo)
         {
+            do
+            {
+                
+            
             decimal newArea;
             string newAreaString = "";
             Console.WriteLine("Press enter if no change...");
             Console.Write("Enter new area ({0}) : ", orderInfo.Order.Area);
             newAreaString = Console.ReadLine();
-            if (newAreaString != "")
+            bool validArea = decimal.TryParse(newAreaString, out newArea);
+            if (newAreaString != "" && validArea && newArea > 0)
             {
-                bool validArea = decimal.TryParse(newAreaString, out newArea);
-                if (validArea)
-                {
-                    orderInfo.Order.Area = newArea;
-                }
+                orderInfo.Order.Area = newArea;
+                return orderInfo;
             }
-            return orderInfo;
+               
+            } while (true);
         }
 
         public void FinalDisplay(Response response)
