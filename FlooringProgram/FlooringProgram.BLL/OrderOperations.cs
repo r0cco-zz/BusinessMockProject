@@ -10,7 +10,7 @@ namespace FlooringProgram.BLL
 {
     public class OrderOperations
     {
-        public Response GetAllOrdersFromDate(int orderDate)
+        public Response GetAllOrdersFromDate(string orderDate)
         {
             var repo = new OrderRepository();
 
@@ -32,7 +32,7 @@ namespace FlooringProgram.BLL
             return response;
         }
 
-        public Response AddOrder(int orderDate, string customerName, string state, string productType, decimal area)
+        public Response AddOrder(string orderDate, string customerName, string state, string productType, decimal area)
         {
             var repo = new OrderRepository(); //change to interface type later
             Order newOrder = new Order();
@@ -63,7 +63,7 @@ namespace FlooringProgram.BLL
            
         }
 
-        public Response RemoveOrder(int orderDate, int orderNumber)
+        public Response RemoveOrder(string orderDate, int orderNumber)
         {
             var repo = new OrderRepository();
             var currentOrder = repo.CheckForOrder(orderDate, orderNumber);
@@ -106,7 +106,7 @@ namespace FlooringProgram.BLL
             repo.DeleteOrder(BLLRemoveOrder);
         }
 
-        public Response EditOrder(int orderDate, int orderNumber)
+        public Response EditOrder(string orderDate, int orderNumber)
         {
             var repo = new OrderRepository();
             var currentOrder = repo.CheckForOrder(orderDate, orderNumber);

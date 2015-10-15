@@ -9,6 +9,6 @@ namespace FlooringProgram.Models
 
     public interface IOrderRepository
     {
-        List<Order> GetAllOrders(int orderDate);
+        List<Order> GetAllOrders(string orderDate);
     }
 }
