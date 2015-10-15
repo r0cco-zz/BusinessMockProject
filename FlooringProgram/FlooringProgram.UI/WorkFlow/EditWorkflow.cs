@@ -15,7 +15,7 @@ namespace FlooringProgram.UI.WorkFlow
         {
             string orderDate = GetOrderDateFromUser();
            
-
+            if (orderDate != "X")
             {
                 int orderNumber = GetOrderNumberFromUser();
 
@@ -24,7 +24,8 @@ namespace FlooringProgram.UI.WorkFlow
                 if (response.Success && response != null)
                 {
                     Response ultimateEdit = DisplayOrder(response);
-                    FinalDisplay(ultimateEdit);
+                    if (ultimateEdit != null)
+                    { FinalDisplay(ultimateEdit);}
                 }
                 else
                 {
@@ -53,8 +54,6 @@ namespace FlooringProgram.UI.WorkFlow
                 {
 
                     DisplayAllOrdersFromDate(orderDate.ToString("MMddyyyy"));
-                    //return orderDate;
-
                     return orderDate.ToString("MMddyyyy");
 
                 }
@@ -153,7 +152,7 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.WriteLine("No changes will be made to this order.");
                 Console.WriteLine("Press enter to return to main menu");
                 Console.ReadLine();
-                return OrderInfo;
+                return null;
             }
         }
 

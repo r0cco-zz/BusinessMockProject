@@ -13,6 +13,7 @@ namespace FlooringProgram.UI.WorkFlow
     {
         public void Execute()
         {
+
             string orderDateRemove = GetOrderDateFromUser();
             DisplayAllOrdersFromDate(orderDateRemove);
             int orderNumberRemove = GetOrderNumberFromUser();
@@ -28,16 +29,27 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Clear();
                 string orderDateString;
                 DateTime orderDate;
-                Console.Write("Enter a date in MMDDYYYY format (no other characters) : ");
+                Console.Write("Enter an order date : ");
                 orderDateString = Console.ReadLine();
-                if (DateTime.TryParse(orderDateString, out orderDate))
+                bool validDate = DateTime.TryParse(orderDateString, out orderDate);
+                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDate.ToString("MMddyyyy")));
+                if (validDate && doesExist)
                 {
                     return orderDate.ToString("MMddyyyy");
                 }
-
-                Console.WriteLine("Please enter a date in MMDDYYYY format.");
-                Console.WriteLine("Press enter to continue");
-                Console.ReadLine();
+                if (validDate && !doesExist)
+                {
+                    Console.WriteLine("There are no orders for that date...");
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadLine();
+                }
+                if (!validDate)
+                {
+                    Console.WriteLine("Please enter a valid date...");
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadLine();
+                }
+                
 
             } while (true);
         }
@@ -51,7 +63,7 @@ namespace FlooringProgram.UI.WorkFlow
                 int orderNumber;
                 Console.Write("Enter an order number to delete : ");
                 orderNumberString = Console.ReadLine();
-                //bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
+                //
                 if (int.TryParse(orderNumberString, out orderNumber))
                 {
                     return orderNumber;
