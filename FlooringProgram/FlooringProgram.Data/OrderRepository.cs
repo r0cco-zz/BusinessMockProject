@@ -134,6 +134,14 @@ namespace FlooringProgram.Data
 
         public void WriteLine(Response OrderInfo)
         {
+            string newName = "";
+            var name = OrderInfo.Order.CustomerName.Split(',');
+            foreach (var x in name)
+            {
+                newName += x;
+            }
+            OrderInfo.Order.CustomerName = newName;
+
             bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate));
             if (alreadyOrder)
             {

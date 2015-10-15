@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FlooringProgram.BLL;
 using FlooringProgram.Models;
+using System.IO;
 
 namespace FlooringProgram.UI.WorkFlow
 {
@@ -13,30 +14,50 @@ namespace FlooringProgram.UI.WorkFlow
         public void Execute()
         {
             int orderDate = GetOrderDateFromUser();
-            int orderNumber = GetOrderNumberFromUser();
-            var ops = new OrderOperations();
-            Response response = ops.EditOrder(orderDate, orderNumber);
-            Response ultimateEdit = DisplayOrder(response);
-            FinalDisplay(ultimateEdit);
+            if (orderDate != 1)
+
+            {
+                int orderNumber = GetOrderNumberFromUser();
+
+                var ops = new OrderOperations();
+                Response response = ops.EditOrder(orderDate, orderNumber);
+                if (response.Success && response != null)
+                {
+                    Response ultimateEdit = DisplayOrder(response);
+                    FinalDisplay(ultimateEdit);
+                }
+                Console.WriteLine("Sorry, there was no order found matching that data...");
+                Console.WriteLine("Press enter to return to the main menu...");
+                Console.ReadLine();
+            }
         }
+
+
 
         public int GetOrderDateFromUser()
         {
             do
             {
                 Console.Clear();
+                string input = "";
                 string orderDateString;
                 int orderDate;
                 Console.Write("Enter a date in MMDDYYYY format (no other characters) : ");
                 orderDateString = Console.ReadLine();
-                if (int.TryParse(orderDateString, out orderDate) && orderDate.ToString().Length == 8)
+                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
+                if (int.TryParse(orderDateString, out orderDate) && orderDate.ToString().Length == 8 && doesExist)
                 {
                     return orderDate;
                 }
 
-                Console.WriteLine("Please enter a date in MMDDYYYY format.");
-                Console.WriteLine("Press enter to continue");
-                Console.ReadLine();
+                Console.WriteLine("Either that is not a valid date, or there are no matching orders.");
+                Console.WriteLine("Press enter to continue, or (M)ain Menu...");
+                input = Console.ReadLine().ToUpper();
+
+                if (input.ToUpper() == "M")
+                {
+                    return 1;
+                }
 
             } while (true);
         }
@@ -96,7 +117,7 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.WriteLine("There was an error");
                 Console.WriteLine("Press enter to return to main menu");
                 Console.ReadLine();
-                
+
             }
             return null;
         }
@@ -173,7 +194,7 @@ namespace FlooringProgram.UI.WorkFlow
             newAreaString = Console.ReadLine();
             if (newAreaString != "")
             {
-               bool validArea = decimal.TryParse(newAreaString, out newArea);
+                bool validArea = decimal.TryParse(newAreaString, out newArea);
                 if (validArea)
                 {
                     orderInfo.Order.Area = newArea;
@@ -198,7 +219,7 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.WriteLine("Labor cost per sq ft : {0:c}", response.Order.ProductType.LaborCost);
                 Console.WriteLine("Total material cost : {0:c}", response.Order.MaterialCost);
                 Console.WriteLine("Total labor cost : {0:c}", response.Order.LaborCost);
-                Console.WriteLine("{0} state tax ({1:p}) : {2:c}", response.Order.State, response.Order.TaxRate / 100,
+                Console.WriteLine("{0} state tax ({1:p}) : {2:c}", response.Order.State, response.Order.TaxRate/100,
                     response.Order.Tax);
                 Console.WriteLine("\nOrder total : {0:c}", response.Order.Total);
                 Console.WriteLine();
