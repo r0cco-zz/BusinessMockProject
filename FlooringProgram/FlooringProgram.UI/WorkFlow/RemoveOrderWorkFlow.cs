@@ -13,12 +13,8 @@ namespace FlooringProgram.UI.WorkFlow
     {
         public void Execute()
         {
-            //TODO int orderDateRemove = GetOrderDateFromUser();
-
-            //DisplayAllOrdersFromDate(orderDateRemove);
-
             string orderDateRemove = GetOrderDateFromUser();
-
+            DisplayAllOrdersFromDate(orderDateRemove);
             int orderNumberRemove = GetOrderNumberFromUser();
             var ops = new OrderOperations();
             var response = ops.RemoveOrder(orderDateRemove, orderNumberRemove);
@@ -53,7 +49,7 @@ namespace FlooringProgram.UI.WorkFlow
                 //Console.Clear();
                 string orderNumberString;
                 int orderNumber;
-                Console.Write("Enter an order number to search for : ");
+                Console.Write("Enter an order number to delete : ");
                 orderNumberString = Console.ReadLine();
                 //bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
                 if (int.TryParse(orderNumberString, out orderNumber))

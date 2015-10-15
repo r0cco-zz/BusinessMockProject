@@ -52,7 +52,7 @@ namespace FlooringProgram.UI.WorkFlow
                 if (doesExist && validDate)
                 {
 
-                    //DisplayAllOrdersFromDate(orderDate);
+                    DisplayAllOrdersFromDate(orderDate.ToString("MMddyyyy"));
                     //return orderDate;
 
                     return orderDate.ToString("MMddyyyy");
