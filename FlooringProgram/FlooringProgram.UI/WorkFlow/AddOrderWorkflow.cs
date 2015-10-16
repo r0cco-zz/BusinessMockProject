@@ -211,10 +211,9 @@ namespace FlooringProgram.UI.WorkFlow
                 string customerName = "";
                 customerName = GetCustomerNameFromUser();
                 string state = GetStateFromUser();
-                string productType = "";
+                string productType;
                 productType = GetProductTypeFromUser();
-                decimal area = 0;
-                area = GetAreaFromUser();
+                var area = GetAreaFromUser();
 
               
 
