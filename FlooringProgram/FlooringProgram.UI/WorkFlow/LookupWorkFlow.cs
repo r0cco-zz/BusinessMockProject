@@ -44,6 +44,8 @@ namespace FlooringProgram.UI.WorkFlow
                 if (!validDate)
                 {
                     Console.WriteLine("That does not look like a valid date...");
+                    Console.WriteLine("Press enter to continue");
+                    Console.ReadLine();
                     var log = new ErrorLogger()
                     {
                         TimeOfError = DateTime.Now,
