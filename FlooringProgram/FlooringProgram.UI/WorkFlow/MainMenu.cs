@@ -7,6 +7,9 @@ namespace FlooringProgram.UI.WorkFlow
 {
     public class MainMenu
     {
+
+        public OrderOperations operations = new OrderOperations(OrderRepositoryFactory.CreateOrderRepository(ConfigurationManager.AppSettings["Mode"]));
+
         public void Execute()
         {
             string input;
@@ -40,7 +43,6 @@ namespace FlooringProgram.UI.WorkFlow
 
         private void ProcessChoice(string choice)
         {
-            var operations = new OrderOperations(OrderRepositoryFactory.CreateOrderRepository(ConfigurationManager.AppSettings["Mode"]));
             switch (choice.ToUpper())
             {
                 case "1":
