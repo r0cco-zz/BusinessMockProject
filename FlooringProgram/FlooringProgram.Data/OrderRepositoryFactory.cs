@@ -20,7 +20,7 @@ namespace FlooringProgram.Data
                     return new OrderRepository();
 
                 case "Prod":
-                    return new ProdOrderRepository();
+                    return new MockOrderRepository();
 
                 default:
                     throw new NotSupportedException(String.Format("{0} not supported!", _sAttr));

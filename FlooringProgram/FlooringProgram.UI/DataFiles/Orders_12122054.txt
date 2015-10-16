@@ -1,0 +1,5 @@
+﻿OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+1,hum,IN,6.00,Tile,0.02,3.50,4.15,0.0700,0.0830,0.009180,0.162180
+2,SamJoeKop,OH,6.25,Carpet,100,2.25,2.10,225.00,210.00,27.187500,462.187500
+3,Pop,IN,6.00,Tile,100,3.50,4.15,350.00,415.00,45.9000,810.9000
+4,Sam,OH,6.25,Wood,100,5.15,4.75,515.00,475.00,61.875000,1051.875000
