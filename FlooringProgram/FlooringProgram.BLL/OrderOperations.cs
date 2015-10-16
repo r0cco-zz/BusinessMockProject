@@ -162,6 +162,10 @@ namespace FlooringProgram.BLL
             repo.ChangeOrder(response);
         }
 
-
+        public void ErrorPassdown(ErrorLogger log)
+        {
+            var repo = new OrderRepository();
+            repo.WriteError(log);
+        }
     }
 }
