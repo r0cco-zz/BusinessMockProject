@@ -219,6 +219,14 @@ namespace FlooringProgram.Data
             WriteLine(order);
         }
 
+        public void WriteError(ErrorLogger log)
+        {
+            using (var writer = File.AppendText(String.Format(@"DataFiles\log.txt")))
+            {
+                writer.WriteLine("{0:s} : {1}", log.TimeOfError, log.Message);
+            }
+        }
+
     }
 }  
 

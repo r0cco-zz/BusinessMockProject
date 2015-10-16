@@ -64,6 +64,13 @@ namespace FlooringProgram.UI.WorkFlow
                     Console.WriteLine("That does not look like a valid date...");
                 Console.WriteLine("Press enter to continue, or (M)ain Menu...");
                 input = Console.ReadLine().ToUpper();
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("AddOrder : invalid date entered : {0}", orderDateString)
+                };
+                var ops = new OrderOperations();
+                ops.ErrorPassdown(log);
                 if (input.ToUpper() == "M")
                 {
                     return "X";
@@ -92,6 +99,14 @@ namespace FlooringProgram.UI.WorkFlow
                     return customerName;
                 }
 
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("AddOrder : invalid customer name entered : {0}", customerName)
+                };
+                var ops = new OrderOperations();
+                ops.ErrorPassdown(log);
+
                 Console.WriteLine("Please Enter a valid customer name (customer names must be at least two characters).");
                 Console.WriteLine("Press enter to continue");
                 Console.ReadLine();
@@ -115,6 +130,13 @@ namespace FlooringProgram.UI.WorkFlow
                     case "IN":
                         return state;
                     default:
+                        var log = new ErrorLogger()
+                        {
+                            TimeOfError = DateTime.Now,
+                            Message = String.Format("AddOrder : invalid state entered : {0}", state)
+                        };
+                        var ops = new OrderOperations();
+                        ops.ErrorPassdown(log);
                         Console.WriteLine("Please enter a valid state abbreviation (from the list provided!)");
                         Console.WriteLine("Press enter to continue");
                         Console.ReadLine();
@@ -142,6 +164,13 @@ namespace FlooringProgram.UI.WorkFlow
                     case "WOOD":
                         return productType;
                     default:
+                        var log = new ErrorLogger()
+                        {
+                            TimeOfError = DateTime.Now,
+                            Message = String.Format("AddOrder : invalid date entered : {0}", productType)
+                        };
+                        var ops = new OrderOperations();
+                        ops.ErrorPassdown(log);
                         Console.WriteLine("Please choose a valid product type");
                         Console.WriteLine("Press enter to continue");
                         Console.ReadLine();
@@ -165,6 +194,14 @@ namespace FlooringProgram.UI.WorkFlow
                 {
                     return area;
                 }
+
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("AddOrder : invalid area entered : {0}", area)
+                };
+                var ops = new OrderOperations();
+                ops.ErrorPassdown(log);
 
                 Console.WriteLine("Please Enter a valid area value");
                 Console.WriteLine("Press enter to continue");
@@ -217,6 +254,13 @@ namespace FlooringProgram.UI.WorkFlow
                 }
                 if (!response.Success)
                 {
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("AddOrder : order display error : {0}", response.Message)
+                    };
+                    ops.ErrorPassdown(log);
+
                     Console.Clear();
                     Console.WriteLine("There was an error");
                     Console.WriteLine("Press enter to return to main menu");

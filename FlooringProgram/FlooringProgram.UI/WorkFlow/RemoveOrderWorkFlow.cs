@@ -39,12 +39,28 @@ namespace FlooringProgram.UI.WorkFlow
                 }
                 if (validDate && !doesExist)
                 {
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("RemoveOrder : no orders found on date entered : {0}", orderDateString)
+                    };
+                    var ops = new OrderOperations();
+                    ops.ErrorPassdown(log);
+
                     Console.WriteLine("There are no orders for that date...");
                     Console.WriteLine("Press enter to continue...");
                     Console.ReadLine();
                 }
                 if (!validDate)
                 {
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("RemoveOrder : invalid date entered : {0}", orderDateString)
+                    };
+                    var ops = new OrderOperations();
+                    ops.ErrorPassdown(log);
+
                     Console.WriteLine("Please enter a valid date...");
                     Console.WriteLine("Press enter to continue...");
                     Console.ReadLine();
@@ -58,16 +74,23 @@ namespace FlooringProgram.UI.WorkFlow
         {
             do
             {
-                //Console.Clear();
                 string orderNumberString;
                 int orderNumber;
                 Console.Write("Enter an order number to delete : ");
                 orderNumberString = Console.ReadLine();
-                //
-                if (int.TryParse(orderNumberString, out orderNumber))
+                bool validInput = int.TryParse(orderNumberString, out orderNumber);
+                if (validInput)
                 {
                     return orderNumber;
                 }
+
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("RemoveOrder : invalid order number entered : {0}", orderNumberString)
+                };
+                var ops = new OrderOperations();
+                ops.ErrorPassdown(log);
 
                 Console.WriteLine("Please enter a number to check for an order.");
                 Console.WriteLine("Press enter to continue");
@@ -103,6 +126,14 @@ namespace FlooringProgram.UI.WorkFlow
             }
             if (!response.Success)
             {
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("RemoveOrder : order does not exist on selected day : {0}", response.Message)
+                };
+                var ops = new OrderOperations();
+                ops.ErrorPassdown(log);
+
                 Console.Clear();
                 Console.WriteLine("There were no orders matching that data...");
                 Console.WriteLine("Press enter to return to main menu");
@@ -155,6 +186,14 @@ namespace FlooringProgram.UI.WorkFlow
             }
             if (!response.Success)
             {
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("RemoveOrder : error displaying orders from selected date : {0}", response.Message)
+                };
+                var ops2 = new OrderOperations();
+                ops2.ErrorPassdown(log);
+
                 Console.Clear();
                 Console.WriteLine("There was an error");
                 Console.WriteLine("Press enter to return to main menu");

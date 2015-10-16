@@ -58,10 +58,29 @@ namespace FlooringProgram.UI.WorkFlow
 
                 }
                 if (!validDate)
+                {
                     Console.WriteLine("That does not look like a valid date...");
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("EditOrder : invalid date entered : {0}", orderDateString)
+                    };
+                    var ops = new OrderOperations();
+                    ops.ErrorPassdown(log);
+                }
+
                 if (validDate && !doesExist)
                     Console.WriteLine("There are no matching orders...");
                 Console.WriteLine("Press enter to continue, or (M)ain Menu...");
+
+                var log2 = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("EditOrder : no orders on date entered : {0}", orderDateString)
+                };
+                var ops2 = new OrderOperations();
+                ops2.ErrorPassdown(log2);
+
                 input = Console.ReadLine().ToUpper();
                 if (input.ToUpper() == "M")
                 {
@@ -86,6 +105,14 @@ namespace FlooringProgram.UI.WorkFlow
                 {
                     return orderNumber;
                 }
+
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("EditOrder : invalid order number entered : {0}", orderNumber)
+                };
+                var ops = new OrderOperations();
+                ops.ErrorPassdown(log);
 
                 Console.WriteLine("Please enter a number to check for an order.");
                 Console.WriteLine("Press enter to continue");
@@ -123,6 +150,14 @@ namespace FlooringProgram.UI.WorkFlow
             }
             if (!response.Success)
             {
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("EditOrder : error displaying order data from selected date : {0}", response.Message)
+                };
+                var ops = new OrderOperations();
+                ops.ErrorPassdown(log);
+
                 Console.Clear();
                 Console.WriteLine("There was an error");
                 Console.WriteLine("Press enter to return to main menu");
@@ -171,48 +206,143 @@ namespace FlooringProgram.UI.WorkFlow
 
         public Response GetNewUserState(Response orderInfo)
         {
-            string newState = "";
-            Console.WriteLine("Press enter if no change...");
-            Console.Write("Enter new state as 2-letter abbreviation ({0}) : ", orderInfo.Order.State);
-            newState = Console.ReadLine().ToUpper();
-            if (newState != "")
+            do
             {
-                orderInfo.Order.State = newState;
-            }
-            return orderInfo;
+                string newState = "";
+                Console.WriteLine("Press enter if no change...");
+                Console.Write("Enter new state as 2-letter abbreviation ({0}) : ", orderInfo.Order.State);
+                newState = Console.ReadLine().ToUpper();
+                switch (newState.ToUpper())
+                {
+                    case "":
+                        return orderInfo;
+                    case "OH":
+                        orderInfo.Order.State = "OH";
+                        orderInfo.Order.TaxRate = (decimal)6.25;
+                        return orderInfo;
+                    case "IN":
+                        orderInfo.Order.State = "IN";
+                        orderInfo.Order.TaxRate = (decimal) 6.00;
+                        return orderInfo;
+                    case "PA":
+                        orderInfo.Order.State = "PA";
+                        orderInfo.Order.TaxRate = (decimal) 6.75;
+                        return orderInfo;
+                    case "MI":
+                        orderInfo.Order.State = "MI";
+                        orderInfo.Order.TaxRate = (decimal) 5.75;
+                        return orderInfo;
+                    default:
+                        var log = new ErrorLogger()
+                        {
+                            TimeOfError = DateTime.Now,
+                            Message = String.Format("EditOrder : invalid state entered : {0}", newState)
+                        };
+                        var ops = new OrderOperations();
+                        ops.ErrorPassdown(log);
+                        break;
+                }
+
+            } while (true);
         }
 
         public Response GetNewUserProductType(Response orderInfo)
         {
-            string newProductType = "";
-            Console.WriteLine("Press enter if no change...");
-            Console.Write("Enter new product type ({0}) : ", orderInfo.Order.ProductType.ProductType);
-            newProductType = Console.ReadLine();
-            if (newProductType != "")
+            do
             {
-                orderInfo.Order.ProductType.ProductType = newProductType;
-            }
-            return orderInfo;
+                string newProductType = "";
+                Console.WriteLine("Press enter if no change...");
+                Console.Write("Enter new product type ({0}) : ", orderInfo.Order.ProductType.ProductType);
+                newProductType = Console.ReadLine();
+                switch (newProductType.ToUpper())
+                {
+                    case "":
+                        return orderInfo;
+                    case "CARPET":
+                        orderInfo.Order.ProductType = new ProductTypes()
+                        {
+                            ProductType = "Carpet",
+                            MaterialCost = (decimal)2.25,
+                            LaborCost = (decimal)2.10
+                        };
+                        return orderInfo;
+                    case "LAMINATE":
+                        orderInfo.Order.ProductType = new ProductTypes()
+                        {
+                            ProductType = "Laminate",
+                            MaterialCost = (decimal)1.75,
+                            LaborCost = (decimal)2.10
+                        };
+                        return orderInfo;
+                    case "TILE":
+                        orderInfo.Order.ProductType = new ProductTypes()
+                        {
+                            ProductType = "Tile",
+                            MaterialCost = (decimal)3.50,
+                            LaborCost = (decimal)4.15
+                        };
+                        return orderInfo;
+                    case "WOOD":
+                        orderInfo.Order.ProductType = new ProductTypes()
+                        {
+                            ProductType = "Wood",
+                            MaterialCost = (decimal) 5.15,
+                            LaborCost = (decimal) 4.75
+                        };
+                        return orderInfo;
+                    default:
+                        var log = new ErrorLogger()
+                        {
+                            TimeOfError = DateTime.Now,
+                            Message = String.Format("EditOrder : invalid product type entered : {0}", newProductType)
+                        };
+                        var ops = new OrderOperations();
+                        ops.ErrorPassdown(log);
+                        break;
+                }
+            } while (true);
         }
 
         public Response GetNewUserArea(Response orderInfo)
         {
             do
             {
-                
-            
-            decimal newArea;
-            string newAreaString = "";
-            Console.WriteLine("Press enter if no change...");
-            Console.Write("Enter new area ({0}) : ", orderInfo.Order.Area);
-            newAreaString = Console.ReadLine();
-            bool validArea = decimal.TryParse(newAreaString, out newArea);
-            if (newAreaString != "" && validArea && newArea > 0)
-            {
-                orderInfo.Order.Area = newArea;
-                return orderInfo;
-            }
-               
+                decimal newArea;
+                string newAreaString = "";
+                Console.WriteLine("Press enter if no change...");
+                Console.Write("Enter new area ({0}) : ", orderInfo.Order.Area);
+                newAreaString = Console.ReadLine();
+                bool validArea = decimal.TryParse(newAreaString, out newArea);
+                if (newAreaString != "" && validArea && newArea > 0)
+                {
+                    orderInfo.Order.Area = newArea;
+                    return orderInfo;
+                }
+                else if (newAreaString == "")
+                {
+                    return orderInfo;
+                }
+                else if (!validArea)
+                {
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("EditOrder : invalid area value entered : {0}", newAreaString)
+                    };
+                    var ops = new OrderOperations();
+                    ops.ErrorPassdown(log);
+                }
+                else if (newArea <= 0)
+                {
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("EditOrder : negative or zero area entered : {0}", newArea)
+                    };
+                    var ops = new OrderOperations();
+                    ops.ErrorPassdown(log);
+                }
+
             } while (true);
         }
 
@@ -243,6 +373,14 @@ namespace FlooringProgram.UI.WorkFlow
             }
             if (!response.Success || response == null)
             {
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("EditOrder : error displaying order info for final validation : {0}", response.Message)
+                };
+                var ops = new OrderOperations();
+                ops.ErrorPassdown(log);
+
                 Console.Clear();
                 Console.WriteLine("There was an error");
                 Console.WriteLine("Press enter to return to main menu");
@@ -284,6 +422,14 @@ namespace FlooringProgram.UI.WorkFlow
             }
             if (!response.Success)
             {
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("EditOrder : error displaying all orders on selected date : {0}", response.Message)
+                };
+                var ops2 = new OrderOperations();
+                ops2.ErrorPassdown(log);
+
                 Console.Clear();
                 Console.WriteLine("There was an error");
                 Console.WriteLine("Press enter to return to main menu");

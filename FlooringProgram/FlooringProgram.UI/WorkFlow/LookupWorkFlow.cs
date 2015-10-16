@@ -42,22 +42,38 @@ namespace FlooringProgram.UI.WorkFlow
                     return orderDate.ToString("MMddyyyy");
                 }
                 if (!validDate)
-                    Console.WriteLine("That does not look like a valid date...");
-                if (validDate && !doesExist)
-                Console.WriteLine("There are no matching orders...");
-                Console.WriteLine("Press enter to continue, or (M)ain Menu...");
-                input = Console.ReadLine().ToUpper();
-                if (input.ToUpper() == "M")
                 {
-                    return "X";
+                    Console.WriteLine("That does not look like a valid date...");
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("LookupOrder : invalid date entered : {0}", orderDateString)
+                    };
+                    var ops = new OrderOperations();
+                    ops.ErrorPassdown(log);
+                }
+                if (validDate && !doesExist)
+                {
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("LookUpOrder : no orders found on date entered : {0}", orderDateString)
+                    };
+                    var ops = new OrderOperations();
+                    ops.ErrorPassdown(log);
+
+                    Console.WriteLine("There are no matching orders...");
+                    Console.WriteLine("Press enter to continue, or (M)ain Menu...");
+                    input = Console.ReadLine().ToUpper();
+
+                    if (input.ToUpper() == "M")
+                    {
+                        return "X";
+                    }
                 }
             } while (true);
             
         }
-        
-
-        //public void DisplayOrdersFromDate(int orderDate)
-
 
         public void DisplayOrdersFromDate(string orderDate)
 
@@ -72,6 +88,14 @@ namespace FlooringProgram.UI.WorkFlow
             }
             else
             {
+                var log = new ErrorLogger()
+                {
+                    TimeOfError = DateTime.Now,
+                    Message = String.Format("LookUpOrder : error fetching all orders from entered date : {0}", response.Message)
+                };
+                var ops2 = new OrderOperations();
+                ops2.ErrorPassdown(log);
+
                 Console.WriteLine("Date not found.");
             }
         }
@@ -132,6 +156,14 @@ namespace FlooringProgram.UI.WorkFlow
                 }
                 else
                 {
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = String.Format("LookUpOrder : invalid order number to lookup more details entered : {0}", input)
+                    };
+                    var ops3 = new OrderOperations();
+                    ops3.ErrorPassdown(log);
+
                     notValidInput = true;
                 }
             } while (notValidInput);
