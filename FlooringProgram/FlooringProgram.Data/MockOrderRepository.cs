@@ -150,7 +150,7 @@ namespace FlooringProgram.Data
 
         public void DeleteOrder(Response order)
         {
-            _orders.Remove(order.Order);
+            _orders.RemoveAll(o => o.OrderNumber == order.Order.OrderNumber);
         }
 
         public void ChangeOrder(Response order)

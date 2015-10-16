@@ -1,0 +1,2 @@
+﻿OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+1,Caves,FL,6.00,Bamboo,250,7.10,5.50,1775.00,1375.00,189.00,3339.00

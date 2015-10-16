@@ -1,0 +1,5 @@
+﻿OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+2,Clapper,TX,6.25,Vinyl,150.00,3.25,4.00,487.50,600.00,67.97,1155.47
+3,Pudelski,FL,6.00,Bamboo,275.00,7.10,5.50,1952.50,1512.50,207.90,3672.90
+4,Dutkiewicz,IN,7.00,Tile,325.00,8.50,6.35,2762.50,2063.75,337.84,5164.09
