@@ -37,11 +37,10 @@ namespace FlooringProgram.Data
                 order.ProductType = new ProductTypes();
 
                 order.OrderNumber = int.Parse(columns[0]);
-
-
-                for (int j = 1; j < columns.Count()-12; j++)
+            
+                for (int j = 1; j < columns.Count()-11; j++)
                 {
-                    order.CustomerName += columns[j] + ",";
+                    order.CustomerName += columns[j] +",";
                 }
                 order.CustomerName += columns[columns.Count() - 11];
 
@@ -144,15 +143,8 @@ namespace FlooringProgram.Data
 
         public void WriteLine(Response OrderInfo)
         {
-            //string newName = "";
-            //var name = OrderInfo.Order.CustomerName.Split(',');
-            //foreach (var x in name)
-            //{
-            //    newName += x;
-            //}
-            //OrderInfo.Order.CustomerName = newName;
+           bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate));
 
-            bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate));
             if (alreadyOrder)
             {
                 using (
