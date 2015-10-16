@@ -1,16 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using FlooringProgram.BLL;
 using FlooringProgram.Models;
 using System.IO;
+using FlooringProgram.Data;
 
 namespace FlooringProgram.UI.WorkFlow
 {
     public class EditWorkflow
     {
+        OrderOperations Ops { get; set; }
+        public EditWorkflow(OrderOperations orderOperations)
+        {
+            Ops = orderOperations;
+        }
+
         public void Execute()
         {
             string orderDate = GetOrderDateFromUser();
@@ -19,8 +23,7 @@ namespace FlooringProgram.UI.WorkFlow
             {
                 int orderNumber = GetOrderNumberFromUser();
 
-                var ops = new OrderOperations();
-                Response response = ops.EditOrder(orderDate, orderNumber);
+                Response response = Ops.EditOrder(orderDate, orderNumber);
                 if (response.Success && response != null)
                 {
                     Response ultimateEdit = DisplayOrder(response);
@@ -65,8 +68,7 @@ namespace FlooringProgram.UI.WorkFlow
                         TimeOfError = DateTime.Now,
                         Message = String.Format("EditOrder : invalid date entered : {0}", orderDateString)
                     };
-                    var ops = new OrderOperations();
-                    ops.ErrorPassdown(log);
+                    Ops.ErrorPassdown(log);
                 }
 
                 if (validDate && !doesExist)
@@ -78,8 +80,7 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("EditOrder : no orders on date entered : {0}", orderDateString)
                 };
-                var ops2 = new OrderOperations();
-                ops2.ErrorPassdown(log2);
+                Ops.ErrorPassdown(log2);
 
                 input = Console.ReadLine().ToUpper();
                 if (input.ToUpper() == "M")
@@ -95,11 +96,10 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 //Console.Clear();
-                string orderNumberString;
                 int orderNumber;
 
                 Console.Write("Enter an order number to edit : ");
-                orderNumberString = Console.ReadLine();
+                var orderNumberString = Console.ReadLine();
                 //bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDateString));
                 if (int.TryParse(orderNumberString, out orderNumber))
                 {
@@ -111,8 +111,7 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("EditOrder : invalid order number entered : {0}", orderNumber)
                 };
-                var ops = new OrderOperations();
-                ops.ErrorPassdown(log);
+                Ops.ErrorPassdown(log);
 
                 Console.WriteLine("Please enter a number to check for an order.");
                 Console.WriteLine("Press enter to continue");
@@ -126,8 +125,8 @@ namespace FlooringProgram.UI.WorkFlow
             if (response.Success)
             {
                 Console.Clear();
-                Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.ToString().Substring(0, 2),
-                    response.Order.OrderDate.ToString().Substring(2, 2),
+                Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.Substring(0, 2),
+                    response.Order.OrderDate.Substring(2, 2),
                     response.Order.OrderDate.ToString().Substring(4));
                 Console.WriteLine("Order number {0:0000}", response.Order.OrderNumber);
                 Console.WriteLine("\nCustomer name : {0}", response.Order.CustomerName);
@@ -155,8 +154,7 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("EditOrder : error displaying order data from selected date : {0}", response.Message)
                 };
-                var ops = new OrderOperations();
-                ops.ErrorPassdown(log);
+                Ops.ErrorPassdown(log);
 
                 Console.Clear();
                 Console.WriteLine("There was an error");
@@ -178,8 +176,7 @@ namespace FlooringProgram.UI.WorkFlow
                 GetNewUserState(OrderInfo);
                 GetNewUserProductType(OrderInfo);
                 GetNewUserArea(OrderInfo);
-                var ops = new OrderOperations();
-                Response response = ops.EditedOrder(OrderInfo);
+                Response response = Ops.EditedOrder(OrderInfo);
                 return response;
             }
             else
@@ -208,7 +205,7 @@ namespace FlooringProgram.UI.WorkFlow
         {
             do
             {
-                string newState = "";
+                string newState;
                 Console.WriteLine("Press enter if no change...");
                 Console.Write("Enter new state as 2-letter abbreviation ({0}) : ", orderInfo.Order.State);
                 newState = Console.ReadLine().ToUpper();
@@ -238,8 +235,7 @@ namespace FlooringProgram.UI.WorkFlow
                             TimeOfError = DateTime.Now,
                             Message = String.Format("EditOrder : invalid state entered : {0}", newState)
                         };
-                        var ops = new OrderOperations();
-                        ops.ErrorPassdown(log);
+                        Ops.ErrorPassdown(log);
                         break;
                 }
 
@@ -296,8 +292,7 @@ namespace FlooringProgram.UI.WorkFlow
                             TimeOfError = DateTime.Now,
                             Message = String.Format("EditOrder : invalid product type entered : {0}", newProductType)
                         };
-                        var ops = new OrderOperations();
-                        ops.ErrorPassdown(log);
+                        Ops.ErrorPassdown(log);
                         break;
                 }
             } while (true);
@@ -308,7 +303,7 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 decimal newArea;
-                string newAreaString = "";
+                string newAreaString;
                 Console.WriteLine("Press enter if no change...");
                 Console.Write("Enter new area ({0}) : ", orderInfo.Order.Area);
                 newAreaString = Console.ReadLine();
@@ -329,8 +324,7 @@ namespace FlooringProgram.UI.WorkFlow
                         TimeOfError = DateTime.Now,
                         Message = String.Format("EditOrder : invalid area value entered : {0}", newAreaString)
                     };
-                    var ops = new OrderOperations();
-                    ops.ErrorPassdown(log);
+                    Ops.ErrorPassdown(log);
                 }
                 else if (newArea <= 0)
                 {
@@ -339,8 +333,7 @@ namespace FlooringProgram.UI.WorkFlow
                         TimeOfError = DateTime.Now,
                         Message = String.Format("EditOrder : negative or zero area entered : {0}", newArea)
                     };
-                    var ops = new OrderOperations();
-                    ops.ErrorPassdown(log);
+                    Ops.ErrorPassdown(log);
                 }
 
             } while (true);
@@ -351,9 +344,9 @@ namespace FlooringProgram.UI.WorkFlow
             if (response.Success && response != null)
             {
                 Console.Clear();
-                Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.ToString().Substring(0, 2),
-                    response.Order.OrderDate.ToString().Substring(2, 2),
-                    response.Order.OrderDate.ToString().Substring(4));
+                Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.Substring(0, 2),
+                    response.Order.OrderDate.Substring(2, 2),
+                    response.Order.OrderDate.Substring(4));
                 Console.WriteLine("Order number {0:0000}", response.Order.OrderNumber);
                 Console.WriteLine("\nCustomer name : {0}", response.Order.CustomerName);
                 Console.WriteLine("Area : {0} sq ft", response.Order.Area);
@@ -378,8 +371,7 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("EditOrder : error displaying order info for final validation : {0}", response.Message)
                 };
-                var ops = new OrderOperations();
-                ops.ErrorPassdown(log);
+                Ops.ErrorPassdown(log);
 
                 Console.Clear();
                 Console.WriteLine("There was an error");
@@ -394,8 +386,7 @@ namespace FlooringProgram.UI.WorkFlow
             string input = Console.ReadLine();
             if (input.ToUpper() == "Y" || input.ToUpper() == "YES")
             {
-                var ops = new OrderOperations();
-                ops.PassEditBLL(response);
+                Ops.PassEditBll(response);
             }
             else
             {
@@ -407,8 +398,7 @@ namespace FlooringProgram.UI.WorkFlow
 
         public void DisplayAllOrdersFromDate(string orderDate)
         {
-            OrderOperations ops = new OrderOperations();
-            var response = ops.GetAllOrdersFromDate(orderDate);
+            var response = Ops.GetAllOrdersFromDate(orderDate);
 
             if (response.Success)
             {
@@ -427,8 +417,7 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("EditOrder : error displaying all orders on selected date : {0}", response.Message)
                 };
-                var ops2 = new OrderOperations();
-                ops2.ErrorPassdown(log);
+                Ops.ErrorPassdown(log);
 
                 Console.Clear();
                 Console.WriteLine("There was an error");

@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using FlooringProgram.BLL;
+using FlooringProgram.Data;
 using FlooringProgram.Models;
 
 namespace FlooringProgram.UI.WorkFlow
 {
     public class AddOrderWorkflow
     {
+        OrderOperations Ops { get; set; }
+        public AddOrderWorkflow(OrderOperations orderOperations)
+        {
+            Ops = orderOperations;
+        }
         public void Execute()
         {
             //int orderDate = GetDateFromUser();
@@ -19,14 +21,7 @@ namespace FlooringProgram.UI.WorkFlow
             //string state = GetStateFromUser();
             //string productType = GetProductTypeFromUser();
             //decimal area = GetAreaFromUser();
-            int orderNumber;
-            decimal taxRate;
-            decimal costPerSqFt;
-            decimal laborPerSqFt;
-            decimal materialCost;
-            decimal laborCost;
-            decimal tax;
-            decimal total;
+            
 
             DisplayOrderInfo();
 
@@ -35,16 +30,13 @@ namespace FlooringProgram.UI.WorkFlow
 
         public string GetDateFromUser()
         {
-            string input = "";
             do
             {
-                string inputContinue = "";
                 var date = DateTime.Now;
                 Console.Clear();
-                string orderDateString = "";
                 DateTime orderDate;
                 Console.Write("Enter an order date: ");
-                orderDateString = Console.ReadLine();
+                var orderDateString = Console.ReadLine();
                 bool validDate = DateTime.TryParse(orderDateString, out orderDate);
                 if (validDate)
                 {
@@ -53,7 +45,7 @@ namespace FlooringProgram.UI.WorkFlow
                     if (orderDate.ToString("MMddyyyy") != date.ToString("MMddyyyy"))
                     {
                         Console.Write("That is not today's date; would you like to continue (y/n) ? : ");
-                        inputContinue = Console.ReadLine();
+                        var inputContinue = Console.ReadLine();
                         if (inputContinue.ToUpper() == "Y")
                             return orderDate.ToString("MMddyyyy");
                         if (inputContinue.ToUpper() == "N")
@@ -63,14 +55,14 @@ namespace FlooringProgram.UI.WorkFlow
                 if (!validDate)
                     Console.WriteLine("That does not look like a valid date...");
                 Console.WriteLine("Press enter to continue, or (M)ain Menu...");
-                input = Console.ReadLine().ToUpper();
+                var input = Console.ReadLine().ToUpper();
                 var log = new ErrorLogger()
                 {
                     TimeOfError = DateTime.Now,
                     Message = String.Format("AddOrder : invalid date entered : {0}", orderDateString)
                 };
-                var ops = new OrderOperations();
-                ops.ErrorPassdown(log);
+              
+                Ops.ErrorPassdown(log);
                 if (input.ToUpper() == "M")
                 {
                     return "X";
@@ -104,8 +96,8 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("AddOrder : invalid customer name entered : {0}", customerName)
                 };
-                var ops = new OrderOperations();
-                ops.ErrorPassdown(log);
+                
+                Ops.ErrorPassdown(log);
 
                 Console.WriteLine("Please Enter a valid customer name (customer names must be at least two characters).");
                 Console.WriteLine("Press enter to continue");
@@ -135,8 +127,8 @@ namespace FlooringProgram.UI.WorkFlow
                             TimeOfError = DateTime.Now,
                             Message = String.Format("AddOrder : invalid state entered : {0}", state)
                         };
-                        var ops = new OrderOperations();
-                        ops.ErrorPassdown(log);
+                      
+                        Ops.ErrorPassdown(log);
                         Console.WriteLine("Please enter a valid state abbreviation (from the list provided!)");
                         Console.WriteLine("Press enter to continue");
                         Console.ReadLine();
@@ -169,8 +161,8 @@ namespace FlooringProgram.UI.WorkFlow
                             TimeOfError = DateTime.Now,
                             Message = String.Format("AddOrder : invalid date entered : {0}", productType)
                         };
-                        var ops = new OrderOperations();
-                        ops.ErrorPassdown(log);
+                      
+                        Ops.ErrorPassdown(log);
                         Console.WriteLine("Please choose a valid product type");
                         Console.WriteLine("Press enter to continue");
                         Console.ReadLine();
@@ -200,8 +192,8 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("AddOrder : invalid area entered : {0}", area)
                 };
-                var ops = new OrderOperations();
-                ops.ErrorPassdown(log);
+              
+                Ops.ErrorPassdown(log);
 
                 Console.WriteLine("Please Enter a valid area value");
                 Console.WriteLine("Press enter to continue");
@@ -224,9 +216,9 @@ namespace FlooringProgram.UI.WorkFlow
                 decimal area = 0;
                 area = GetAreaFromUser();
 
-                var ops = new OrderOperations();
+              
 
-                var response = ops.AddOrder(orderDate, customerName, state, productType, area);
+                var response = Ops.AddOrder(orderDate, customerName, state, productType, area);
 
                 if (response.Success)
                 {
@@ -259,7 +251,7 @@ namespace FlooringProgram.UI.WorkFlow
                         TimeOfError = DateTime.Now,
                         Message = String.Format("AddOrder : order display error : {0}", response.Message)
                     };
-                    ops.ErrorPassdown(log);
+                    Ops.ErrorPassdown(log);
 
                     Console.Clear();
                     Console.WriteLine("There was an error");
@@ -276,13 +268,13 @@ namespace FlooringProgram.UI.WorkFlow
 
             if (input.ToUpper() == "Y" || input.ToUpper() == "YES")
             {
-                var ops = new OrderOperations();
+              
 
                 var UIOrder = new Response();
                 UIOrder = OrderInfo;
 
                 // this method will pass order info to the BLL
-                ops.PassAddToData(UIOrder);
+                Ops.PassAddToData(UIOrder);
                 Console.WriteLine("Your order has been saved successfully!");
                 Console.WriteLine("Press enter to return to main menu");
                 Console.ReadLine();

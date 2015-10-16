@@ -8,18 +8,18 @@ using FlooringProgram.Models;
 
 namespace FlooringProgram.Data
 {
-    public  class OrderRepositoryFactory
+    public class OrderRepositoryFactory
     {
-        private string _sAttr = ConfigurationManager.AppSettings["Mode"];
+       
 
         public static IOrderRepository CreateOrderRepository(string _sAttr)
         {
             switch (_sAttr)
             {
-                case "Dev":
+                case "Prod":
                     return new OrderRepository();
 
-                case "Prod":
+                case "Dev":
                     return new MockOrderRepository();
 
                 default:

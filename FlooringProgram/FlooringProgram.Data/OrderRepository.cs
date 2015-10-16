@@ -89,10 +89,10 @@ namespace FlooringProgram.Data
             return products;
         }
 
-        public ProductTypes GetProduct(string ProductType)
+        public ProductTypes GetProduct(string productType)
         {
             List<ProductTypes> products = GetProducts();
-            return products.FirstOrDefault(a => a.ProductType == ProductType);
+            return products.FirstOrDefault(a => a.ProductType == productType);
         }
 
         public List<StateInfo> GetStates()
@@ -119,12 +119,12 @@ namespace FlooringProgram.Data
             return states;
         }
 
-        public StateInfo GetState(string StateAbb)
+        public StateInfo GetState(string stateAbb)
         {
             List<StateInfo> states = GetStates();
             foreach (var a in states)
             {
-                if (a.StateAbb == StateAbb) return a;
+                if (a.StateAbb == stateAbb) return a;
             }
             return null;
         }
@@ -141,36 +141,36 @@ namespace FlooringProgram.Data
             return 1;
         }
 
-        public void WriteLine(Response OrderInfo)
+        public void WriteLine(Response orderInfo)
         {
-           bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate));
+           bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderInfo.Order.OrderDate));
 
             if (alreadyOrder)
             {
                 using (
-                    var writer = File.AppendText(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate)))
+                    var writer = File.AppendText(String.Format(@"DataFiles\Orders_{0}.txt", orderInfo.Order.OrderDate)))
                 {
-                    writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderInfo.Order.OrderNumber,
-                        OrderInfo.Order.CustomerName, OrderInfo.Order.State,
-                        OrderInfo.Order.TaxRate, OrderInfo.Order.ProductType.ProductType, OrderInfo.Order.Area,
-                        OrderInfo.Order.ProductType.MaterialCost, OrderInfo.Order.ProductType.LaborCost,
-                        OrderInfo.Order.MaterialCost, OrderInfo.Order.LaborCost, OrderInfo.Order.Tax,
-                        OrderInfo.Order.Total);
+                    writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", orderInfo.Order.OrderNumber,
+                        orderInfo.Order.CustomerName, orderInfo.Order.State,
+                        orderInfo.Order.TaxRate, orderInfo.Order.ProductType.ProductType, orderInfo.Order.Area,
+                        orderInfo.Order.ProductType.MaterialCost, orderInfo.Order.ProductType.LaborCost,
+                        orderInfo.Order.MaterialCost, orderInfo.Order.LaborCost, orderInfo.Order.Tax,
+                        orderInfo.Order.Total);
                 }
             }
             else
             {
                 using (
-                    var writer = File.CreateText(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate)))
+                    var writer = File.CreateText(String.Format(@"DataFiles\Orders_{0}.txt", orderInfo.Order.OrderDate)))
                 {
 
                     writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
-                    writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderInfo.Order.OrderNumber,
-                        OrderInfo.Order.CustomerName, OrderInfo.Order.State,
-                        OrderInfo.Order.TaxRate, OrderInfo.Order.ProductType.ProductType, OrderInfo.Order.Area,
-                        OrderInfo.Order.ProductType.MaterialCost, OrderInfo.Order.ProductType.LaborCost,
-                        OrderInfo.Order.MaterialCost, OrderInfo.Order.LaborCost, OrderInfo.Order.Tax,
-                        OrderInfo.Order.Total);
+                    writer.WriteLine("\n{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", orderInfo.Order.OrderNumber,
+                        orderInfo.Order.CustomerName, orderInfo.Order.State,
+                        orderInfo.Order.TaxRate, orderInfo.Order.ProductType.ProductType, orderInfo.Order.Area,
+                        orderInfo.Order.ProductType.MaterialCost, orderInfo.Order.ProductType.LaborCost,
+                        orderInfo.Order.MaterialCost, orderInfo.Order.LaborCost, orderInfo.Order.Tax,
+                        orderInfo.Order.Total);
                 }
             }
         }

@@ -10,13 +10,13 @@ namespace FlooringProgram.Data
 {
     public class MockOrderRepository : IOrderRepository
     {
-        public List<Order> GetAllOrders(string orderDate)
+        public List<Order> _orders = new List<Order>();
+
+        public MockOrderRepository()
         {
-            string _filePath = @"DataFiles\Orders_12122054.txt"; 
+            string _filePath = @"DataFiles\Orders_12122054.txt";
 
             GetProducts();
-
-            List<Order> orders = new List<Order>();
 
             //need to check if filepath is null!!
             var reader = File.ReadAllLines(_filePath);
@@ -53,10 +53,15 @@ namespace FlooringProgram.Data
 
                 order.OrderDate = (_filePath.Substring(17, 8));
 
-                orders.Add(order);
+                _orders.Add(order);
             }
 
-            return orders;
+           
+        } 
+
+        public List<Order> GetAllOrders(string orderDate)
+        {
+            return _orders;
         }
 
         public List<ProductTypes> GetProducts()
@@ -73,11 +78,13 @@ namespace FlooringProgram.Data
             {
                 var columns = reader[i].Split(',');
 
-                var product = new ProductTypes();
+                var product = new ProductTypes
+                {
+                    ProductType = columns[0],
+                    MaterialCost = decimal.Parse(columns[1]),
+                    LaborCost = decimal.Parse(columns[2])
+                };
 
-                product.ProductType = columns[0];
-                product.MaterialCost = decimal.Parse(columns[1]);
-                product.LaborCost = decimal.Parse(columns[2]);
 
                 products.Add(product);
             }
@@ -85,10 +92,10 @@ namespace FlooringProgram.Data
             return products;
         }
 
-        public ProductTypes GetProduct(string ProductType)
+        public ProductTypes GetProduct(string productType)
         {
             List<ProductTypes> products = GetProducts();
-            return products.FirstOrDefault(a => a.ProductType == ProductType);
+            return products.FirstOrDefault(a => a.ProductType == productType);
         }
 
         public List<StateInfo> GetStates()
@@ -115,45 +122,49 @@ namespace FlooringProgram.Data
             return states;
         }
 
-        public StateInfo GetState(string StateAbb)
+        public StateInfo GetState(string stateAbb)
         {
             List<StateInfo> states = GetStates();
             foreach (var a in states)
             {
-                if (a.StateAbb == StateAbb) return a;
+                if (a.StateAbb == stateAbb) return a;
             }
             return null;
         }
 
         public int GetOrderNumber(string orderDate)
         {
-            var orders = GetAllOrders(orderDate);
-            var max = orders.Max(a => a.OrderNumber);
+            var max = _orders.Max(a => a.OrderNumber);
             return max + 1;
         }
 
-        public void WriteLine(Response OrderInfo)
+        public void WriteLine(Response orderInfo)
         {
-            var orders = GetAllOrders("12122054");
-            orders.Add(OrderInfo.Order);
+            _orders.Add(orderInfo.Order);
         }
 
         public Order CheckForOrder(string orderDate, int orderNumber)
         {
-            var orders = GetAllOrders(orderDate);
-            return orders.FirstOrDefault(a => a.OrderNumber == orderNumber);
+            return _orders.FirstOrDefault(a => a.OrderNumber == orderNumber);
         }
 
         public void DeleteOrder(Response order)
         {
-            var orders = GetAllOrders("");
-            orders.Remove(order.Order);
+            _orders.Remove(order.Order);
         }
 
         public void ChangeOrder(Response order)
         {
             DeleteOrder(order);
             WriteLine(order);
+        }
+
+        public void WriteError(ErrorLogger log)
+        {
+            using (var writer = File.AppendText(String.Format(@"DataFiles\log.txt")))
+            {
+                writer.WriteLine("{0:s} : {1}", log.TimeOfError, log.Message);
+            }
         }
 
 

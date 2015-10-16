@@ -1,24 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FlooringProgram.BLL;
+using FlooringProgram.Data;
 using FlooringProgram.Models;
 
 namespace FlooringProgram.UI.WorkFlow
 {
     public class RemoveOrderWorkFlow
     {
+        OrderOperations Ops { get; set; }
+        public RemoveOrderWorkFlow(OrderOperations orderOperations)
+        {
+            Ops = orderOperations;
+        }
+
         public void Execute()
         {
 
             string orderDateRemove = GetOrderDateFromUser();
             DisplayAllOrdersFromDate(orderDateRemove);
             int orderNumberRemove = GetOrderNumberFromUser();
-            var ops = new OrderOperations();
-            var response = ops.RemoveOrder(orderDateRemove, orderNumberRemove);
+            var response = Ops.RemoveOrder(orderDateRemove, orderNumberRemove);
             DisplayOrder(response);
         }
 
@@ -44,8 +47,7 @@ namespace FlooringProgram.UI.WorkFlow
                         TimeOfError = DateTime.Now,
                         Message = String.Format("RemoveOrder : no orders found on date entered : {0}", orderDateString)
                     };
-                    var ops = new OrderOperations();
-                    ops.ErrorPassdown(log);
+                    Ops.ErrorPassdown(log);
 
                     Console.WriteLine("There are no orders for that date...");
                     Console.WriteLine("Press enter to continue...");
@@ -58,8 +60,7 @@ namespace FlooringProgram.UI.WorkFlow
                         TimeOfError = DateTime.Now,
                         Message = String.Format("RemoveOrder : invalid date entered : {0}", orderDateString)
                     };
-                    var ops = new OrderOperations();
-                    ops.ErrorPassdown(log);
+                    Ops.ErrorPassdown(log);
 
                     Console.WriteLine("Please enter a valid date...");
                     Console.WriteLine("Press enter to continue...");
@@ -89,8 +90,7 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("RemoveOrder : invalid order number entered : {0}", orderNumberString)
                 };
-                var ops = new OrderOperations();
-                ops.ErrorPassdown(log);
+                Ops.ErrorPassdown(log);
 
                 Console.WriteLine("Please enter a number to check for an order.");
                 Console.WriteLine("Press enter to continue");
@@ -104,8 +104,8 @@ namespace FlooringProgram.UI.WorkFlow
             if (response.Success)
             {
                 Console.Clear();
-                Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.ToString().Substring(0, 2),
-                    response.Order.OrderDate.ToString().Substring(2, 2), response.Order.OrderDate.ToString().Substring(4));
+                Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.Substring(0, 2),
+                    response.Order.OrderDate.Substring(2, 2), response.Order.OrderDate.Substring(4));
                 Console.WriteLine("Order number {0:0000}", response.Order.OrderNumber);
                 Console.WriteLine("\nCustomer name : {0}", response.Order.CustomerName);
                 Console.WriteLine("Area : {0} sq ft", response.Order.Area);
@@ -131,8 +131,7 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("RemoveOrder : order does not exist on selected day : {0}", response.Message)
                 };
-                var ops = new OrderOperations();
-                ops.ErrorPassdown(log);
+                Ops.ErrorPassdown(log);
 
                 Console.Clear();
                 Console.WriteLine("There were no orders matching that data...");
@@ -141,20 +140,18 @@ namespace FlooringProgram.UI.WorkFlow
             }
         }
 
-        public void ConfirmUserCommit(Response OrderInfo)
+        public void ConfirmUserCommit(Response orderInfo)
         {
             Console.Write("Are you sure you would like to delete this order (y/n) ? : ");
             string input = Console.ReadLine();
 
-            if (input.ToUpper() == "Y" || input.ToUpper() == "YES")
+            if (input != null && (input.ToUpper() == "Y" || input.ToUpper() == "YES"))
             {
-                var ops = new OrderOperations();
-
-                var UIOrder = new Response();
-                UIOrder = OrderInfo;
+                Response UIOrder;
+                UIOrder = orderInfo;
 
                 // this method will pass order info to the BLL
-                ops.PassRemoveFromData(UIOrder);
+                Ops.PassRemoveFromData(UIOrder);
                 Console.WriteLine("Your order has been successfully removed!");
                 Console.WriteLine("Press enter to return to main menu");
                 Console.ReadLine();
@@ -171,8 +168,7 @@ namespace FlooringProgram.UI.WorkFlow
 
         public void DisplayAllOrdersFromDate(string orderDate)
         {
-            OrderOperations ops = new OrderOperations();
-            var response = ops.GetAllOrdersFromDate(orderDate);
+            var response = Ops.GetAllOrdersFromDate(orderDate);
 
             if (response.Success)
             {
@@ -191,8 +187,7 @@ namespace FlooringProgram.UI.WorkFlow
                     TimeOfError = DateTime.Now,
                     Message = String.Format("RemoveOrder : error displaying orders from selected date : {0}", response.Message)
                 };
-                var ops2 = new OrderOperations();
-                ops2.ErrorPassdown(log);
+                Ops.ErrorPassdown(log);
 
                 Console.Clear();
                 Console.WriteLine("There was an error");

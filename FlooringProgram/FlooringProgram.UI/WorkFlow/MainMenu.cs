@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+using FlooringProgram.BLL;
+using FlooringProgram.Data;
 
 namespace FlooringProgram.UI.WorkFlow
 {
@@ -10,7 +9,7 @@ namespace FlooringProgram.UI.WorkFlow
     {
         public void Execute()
         {
-            string input = "";
+            string input;
             do
             {
                 Console.Clear();
@@ -41,25 +40,26 @@ namespace FlooringProgram.UI.WorkFlow
 
         private void ProcessChoice(string choice)
         {
+            var operations = new OrderOperations(OrderRepositoryFactory.CreateOrderRepository(ConfigurationManager.AppSettings["Mode"]));
             switch (choice.ToUpper())
             {
                 case "1":
-                    LookupWorkFlow lwf = new LookupWorkFlow();
+                    LookupWorkFlow lwf = new LookupWorkFlow(operations);
                     lwf.Execute();
                     break;
 
                 case "2":
-                    AddOrderWorkflow aowf = new AddOrderWorkflow();
+                    AddOrderWorkflow aowf = new AddOrderWorkflow(operations);
                     aowf.Execute();
                     break;
 
                 case "3":
-                    EditWorkflow ewfl = new EditWorkflow();
+                    EditWorkflow ewfl = new EditWorkflow(operations);
                     ewfl.Execute();
                     break;
 
                 case "4":
-                     RemoveOrderWorkFlow rowfl = new RemoveOrderWorkFlow();
+                     RemoveOrderWorkFlow rowfl = new RemoveOrderWorkFlow(operations);
                     rowfl.Execute();
                     break;
 
