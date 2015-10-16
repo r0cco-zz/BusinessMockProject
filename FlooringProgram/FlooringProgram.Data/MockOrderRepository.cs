@@ -12,6 +12,8 @@ namespace FlooringProgram.Data
     {
         public List<Order> _orders = new List<Order>();
 
+        //public Dictionary<string, List<Order>> _ordersOnADate = new Dictionary<string, List<Order>>(); 
+
         public MockOrderRepository()
         {
             string _filePath = @"DataFiles\Orders_12122054.txt";
