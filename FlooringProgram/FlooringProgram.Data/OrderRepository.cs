@@ -39,10 +39,11 @@ namespace FlooringProgram.Data
                 order.OrderNumber = int.Parse(columns[0]);
 
 
-                for (int j = 1; j < columns.Count()-10; j++)
+                for (int j = 1; j < columns.Count()-12; j++)
                 {
-                    order.CustomerName += columns[j];
+                    order.CustomerName += columns[j] + ",";
                 }
+                order.CustomerName += columns[columns.Count() - 11];
 
                 order.State = columns[columns.Count()-10];
                 order.TaxRate = decimal.Parse(columns[columns.Count()-9]);
@@ -143,13 +144,13 @@ namespace FlooringProgram.Data
 
         public void WriteLine(Response OrderInfo)
         {
-            string newName = "";
-            var name = OrderInfo.Order.CustomerName.Split(',');
-            foreach (var x in name)
-            {
-                newName += x;
-            }
-            OrderInfo.Order.CustomerName = newName;
+            //string newName = "";
+            //var name = OrderInfo.Order.CustomerName.Split(',');
+            //foreach (var x in name)
+            //{
+            //    newName += x;
+            //}
+            //OrderInfo.Order.CustomerName = newName;
 
             bool alreadyOrder = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", OrderInfo.Order.OrderDate));
             if (alreadyOrder)
