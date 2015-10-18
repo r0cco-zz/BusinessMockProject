@@ -84,8 +84,6 @@ namespace FlooringProgram.Tests
             Assert.AreEqual(expected, result);
         }
 
-        
-
     }
 
 }
