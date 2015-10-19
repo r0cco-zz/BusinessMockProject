@@ -195,6 +195,7 @@ namespace FlooringProgram.Data
             var DateOrderList = allOrdersOnDate[order.Order.OrderDate];
             DateOrderList.Remove(order.Order);
 
+
             if (DateOrderList.Count == 0)
             {
                 allOrdersOnDate.Remove(order.Order.OrderDate);
