@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using FlooringProgram.BLL;
 using FlooringProgram.Models;
 using System.IO;
-using FlooringProgram.Data;
 
 namespace FlooringProgram.UI.WorkFlow
 {
@@ -32,14 +30,12 @@ namespace FlooringProgram.UI.WorkFlow
 
         public string GetOrderDateFromUser()
         {
-            string input = "";
             do
             {
                 Console.Clear();
-                string orderDateString = "";
                 DateTime orderDate;
                 Console.Write("Enter an order date: ");
-                orderDateString = Console.ReadLine();
+                var orderDateString = Console.ReadLine();
                 bool validDate = DateTime.TryParse(orderDateString, out orderDate);
 
                 
@@ -60,22 +56,26 @@ namespace FlooringProgram.UI.WorkFlow
                     };
                     Ops.ErrorPassdown(log);
                 }
-                if (validDate && !doesExist)
+                if (validDate)
                 {
                     var log = new ErrorLogger()
                     {
                         TimeOfError = DateTime.Now,
-                        Message = String.Format("LookUpOrder : no orders found on date entered : {0}", orderDateString)
+                        Message = $"LookUpOrder : no orders found on date entered : {orderDateString}"
                     };
                     Ops.ErrorPassdown(log);
 
                     Console.WriteLine("There are no matching orders...");
                     Console.WriteLine("Press enter to continue, or (M)ain Menu...");
-                    input = Console.ReadLine().ToUpper();
-
-                    if (input.ToUpper() == "M")
+                    var input = Console.ReadLine();
+                    if (input != null)
                     {
-                        return "X";
+                        input = input.ToUpper();
+
+                        if (input.ToUpper() == "M")
+                        {
+                            return "X";
+                        }
                     }
                 }
             } while (true);
@@ -133,9 +133,9 @@ namespace FlooringProgram.UI.WorkFlow
                                 select a;
                     foreach (var toPrint in order)
                     {
-                        Console.WriteLine("Order date : {0}/{1}/{2}", toPrint.OrderDate.ToString().Substring(0, 2),
-                            toPrint.OrderDate.ToString().Substring(2, 2),
-                            toPrint.OrderDate.ToString().Substring(4));
+                        Console.WriteLine("Order date : {0}/{1}/{2}", toPrint.OrderDate.Substring(0, 2),
+                            toPrint.OrderDate.Substring(2, 2),
+                            toPrint.OrderDate.Substring(4));
                         Console.WriteLine("Order number {0:0000}", toPrint.OrderNumber);
                         Console.WriteLine("\nCustomer name : {0}", toPrint.CustomerName);
                         Console.WriteLine("Area : {0} sq ft", toPrint.Area);
@@ -153,7 +153,7 @@ namespace FlooringProgram.UI.WorkFlow
                     }
                     notValidInput = false;
                 }
-                else if (input.ToUpper() == "M")
+                else if (input != null && input.ToUpper() == "M")
                 {
                     notValidInput = false;
                 }
@@ -162,7 +162,7 @@ namespace FlooringProgram.UI.WorkFlow
                     var log = new ErrorLogger()
                     {
                         TimeOfError = DateTime.Now,
-                        Message = String.Format("LookUpOrder : invalid order number to lookup more details entered : {0}", input)
+                        Message = $"LookUpOrder : invalid order number to lookup more details entered : {input}"
                     };
                     Ops.ErrorPassdown(log);
 

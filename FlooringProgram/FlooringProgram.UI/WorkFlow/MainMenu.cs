@@ -8,7 +8,7 @@ namespace FlooringProgram.UI.WorkFlow
     public class MainMenu
     {
 
-        public OrderOperations operations = new OrderOperations(OrderRepositoryFactory.CreateOrderRepository(ConfigurationManager.AppSettings["Mode"]));
+        public OrderOperations Operations = new OrderOperations(OrderRepositoryFactory.CreateOrderRepository(ConfigurationManager.AppSettings["Mode"]));
 
         public void Execute()
         {
@@ -46,22 +46,22 @@ namespace FlooringProgram.UI.WorkFlow
             switch (choice.ToUpper())
             {
                 case "1":
-                    LookupWorkFlow lwf = new LookupWorkFlow(operations);
+                    LookupWorkFlow lwf = new LookupWorkFlow(Operations);
                     lwf.Execute();
                     break;
 
                 case "2":
-                    AddOrderWorkflow aowf = new AddOrderWorkflow(operations);
+                    AddOrderWorkflow aowf = new AddOrderWorkflow(Operations);
                     aowf.Execute();
                     break;
 
                 case "3":
-                    EditWorkflow ewfl = new EditWorkflow(operations);
+                    EditWorkflow ewfl = new EditWorkflow(Operations);
                     ewfl.Execute();
                     break;
 
                 case "4":
-                     RemoveOrderWorkFlow rowfl = new RemoveOrderWorkFlow(operations);
+                     RemoveOrderWorkFlow rowfl = new RemoveOrderWorkFlow(Operations);
                     rowfl.Execute();
                     break;
 

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Configuration;
-using System.IO;
 using FlooringProgram.BLL;
-using FlooringProgram.Data;
 using FlooringProgram.Models;
 
 namespace FlooringProgram.UI.WorkFlow
@@ -42,12 +39,12 @@ namespace FlooringProgram.UI.WorkFlow
                 {
                     return orderDate.ToString("MMddyyyy");
                 }
-                if (validDate && !doesExist)
+                if (validDate)
                 {
                     var log = new ErrorLogger()
                     {
                         TimeOfError = DateTime.Now,
-                        Message = String.Format("RemoveOrder : no orders found on date entered : {0}", orderDateString)
+                        Message = $"RemoveOrder : no orders found on date entered : {orderDateString}"
                     };
                     Ops.ErrorPassdown(log);
 
@@ -149,11 +146,10 @@ namespace FlooringProgram.UI.WorkFlow
 
             if (input != null && (input.ToUpper() == "Y" || input.ToUpper() == "YES"))
             {
-                Response UIOrder;
-                UIOrder = orderInfo;
+                var uiOrder = orderInfo;
 
                 // this method will pass order info to the BLL
-                Ops.PassRemoveFromData(UIOrder);
+                Ops.PassRemoveFromData(uiOrder);
                 Console.WriteLine("Your order has been successfully removed!");
                 Console.WriteLine("Press enter to return to main menu");
                 Console.ReadLine();

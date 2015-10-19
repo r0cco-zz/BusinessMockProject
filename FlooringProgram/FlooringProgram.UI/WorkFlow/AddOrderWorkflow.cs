@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Configuration;
 using FlooringProgram.BLL;
-using FlooringProgram.Data;
 using FlooringProgram.Models;
 
 namespace FlooringProgram.UI.WorkFlow
@@ -46,26 +44,30 @@ namespace FlooringProgram.UI.WorkFlow
                     {
                         Console.Write("That is not today's date; would you like to continue (y/n) ? : ");
                         var inputContinue = Console.ReadLine();
-                        if (inputContinue.ToUpper() == "Y")
+                        if (inputContinue != null && inputContinue.ToUpper() == "Y")
                             return orderDate.ToString("MMddyyyy");
-                        if (inputContinue.ToUpper() == "N")
+                        if (inputContinue != null && inputContinue.ToUpper() == "N")
                             return "X";
                     }
                 }
                 if (!validDate)
                     Console.WriteLine("That does not look like a valid date...");
                 Console.WriteLine("Press enter to continue, or (M)ain Menu...");
-                var input = Console.ReadLine().ToUpper();
-                var log = new ErrorLogger()
+                var input = Console.ReadLine();
+                if (input != null)
                 {
-                    TimeOfError = DateTime.Now,
-                    Message = String.Format("AddOrder : invalid date entered : {0}", orderDateString)
-                };
+                    input = input.ToUpper();
+                    var log = new ErrorLogger()
+                    {
+                        TimeOfError = DateTime.Now,
+                        Message = $"AddOrder : invalid date entered : {orderDateString}"
+                    };
               
-                Ops.ErrorPassdown(log);
-                if (input.ToUpper() == "M")
-                {
-                    return "X";
+                    Ops.ErrorPassdown(log);
+                    if (input.ToUpper() == "M")
+                    {
+                        return "X";
+                    }
                 }
             } while (true);
 
@@ -86,7 +88,7 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Write("Please enter customer name : ");
                 string customerName = Console.ReadLine();
 
-                if (customerName != "" && customerName.Length >= 2)
+                if (customerName != null && (customerName != "" && customerName.Length >= 2))
                 {
                     return customerName;
                 }
@@ -112,29 +114,31 @@ namespace FlooringProgram.UI.WorkFlow
             {
                 Console.Clear();
                 Console.Write("Please choose a state (OH, PA, MI, or IN) : ");
-                string state = Console.ReadLine().ToUpper();
-
-                switch (state)
+                var state = Console.ReadLine();
+                if (state != null)
                 {
-                    case "OH":
-                    case "PA":
-                    case "MI":
-                    case "IN":
-                        return state;
-                    default:
-                        var log = new ErrorLogger()
-                        {
-                            TimeOfError = DateTime.Now,
-                            Message = String.Format("AddOrder : invalid state entered : {0}", state)
-                        };
-                      
-                        Ops.ErrorPassdown(log);
-                        Console.WriteLine("Please enter a valid state abbreviation (from the list provided!)");
-                        Console.WriteLine("Press enter to continue");
-                        Console.ReadLine();
-                        break;
-                }
+                    state = state.ToUpper();
 
+                    switch (state)
+                    {
+                        case "OH":
+                        case "PA":
+                        case "MI":
+                        case "IN":
+                            return state;
+                        default:
+                            var log = new ErrorLogger()
+                            {
+                                TimeOfError = DateTime.Now,
+                                Message = String.Format("AddOrder : invalid state entered : {0}", state)
+                            };
+                      
+                            Ops.ErrorPassdown(log);
+                            Console.WriteLine("Please enter a valid state abbreviation (from the list provided!)");
+                            Console.WriteLine("Press enter to continue");
+                            break;
+                    }
+                }
             } while (true);
         }
 
@@ -146,32 +150,30 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Write("Please enter the product type (Carpet, Laminate, Tile, Wood) : ");
                 string productType = Console.ReadLine();
 
-                switch (productType.ToUpper())
-                {
-                    case "CARPET":
+                if (productType != null)
+                    switch (productType.ToUpper())
+                    {
+                        case "CARPET":
 
 
-                    case "LAMINATE":
-                    case "TILE":
-                    case "WOOD":
-                        return productType;
-                    default:
-                        var log = new ErrorLogger()
-                        {
-                            TimeOfError = DateTime.Now,
-                            Message = String.Format("AddOrder : invalid date entered : {0}", productType)
-                        };
+                        case "LAMINATE":
+                        case "TILE":
+                        case "WOOD":
+                            return productType;
+                        default:
+                            var log = new ErrorLogger()
+                            {
+                                TimeOfError = DateTime.Now,
+                                Message = String.Format("AddOrder : invalid date entered : {0}", productType)
+                            };
                       
-                        Ops.ErrorPassdown(log);
-                        Console.WriteLine("Please choose a valid product type");
-                        Console.WriteLine("Press enter to continue");
-                        Console.ReadLine();
-                        break;
+                            Ops.ErrorPassdown(log);
+                            Console.WriteLine("Please choose a valid product type");
+                            Console.WriteLine("Press enter to continue");
+                            Console.ReadLine();
+                            break;
 
-                }
-
-
-
+                    }
             } while (true);
         }
 
@@ -208,7 +210,7 @@ namespace FlooringProgram.UI.WorkFlow
             if (orderDate != "X")
 
             {
-                string customerName = "";
+                string customerName;
                 customerName = GetCustomerNameFromUser();
                 string state = GetStateFromUser();
                 string productType;
@@ -260,17 +262,17 @@ namespace FlooringProgram.UI.WorkFlow
             }
         }
 
-        public void ConfirmUserCommit(Response OrderInfo)
+        public void ConfirmUserCommit(Response orderInfo)
         {
             Console.Write("Do you want to commit these changes to memory (y/n) ? : ");
             string input = Console.ReadLine();
 
-            if (input.ToUpper() == "Y" || input.ToUpper() == "YES")
+            if (input != null && (input.ToUpper() == "Y" || input.ToUpper() == "YES"))
             {
               
 
-                var UIOrder = new Response();
-                UIOrder = OrderInfo;
+                Response UIOrder;
+                UIOrder = orderInfo;
 
                 // this method will pass order info to the BLL
                 Ops.PassAddToData(UIOrder);
