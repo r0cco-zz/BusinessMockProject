@@ -12,7 +12,7 @@ namespace FlooringProgram.Data
     {
         public List<Order> _orders = new List<Order>();
 
-        //public Dictionary<string, List<Order>> _ordersOnADate = new Dictionary<string, List<Order>>(); 
+        Dictionary<string, List<Order>> allOrdersOnDate = new Dictionary<string, List<Order>>();
 
         public MockOrderRepository()
         {
@@ -58,11 +58,28 @@ namespace FlooringProgram.Data
                 _orders.Add(order);
             }
 
-           
-        } 
+            var results =
+                _orders.OrderBy(o => o.OrderDate)
+                    .GroupBy(o => o.OrderDate)
+                    .Select(dateOrders => new {Date = dateOrders.Key, Orders = dateOrders});
+
+            foreach (var result in results)
+            {
+                allOrdersOnDate.Add(result.Date, new List<Order>(result.Orders));
+            }
+
+    } 
 
         public List<Order> GetAllOrders(string orderDate)
         {
+            List<Order> DateOrderList = new List<Order>();
+
+            if (allOrdersOnDate.ContainsKey(orderDate) && allOrdersOnDate[orderDate] != null)
+            {
+                DateOrderList = allOrdersOnDate[orderDate];
+                return DateOrderList;
+            }
+
             return _orders;
         }
 
@@ -136,29 +153,63 @@ namespace FlooringProgram.Data
 
         public int GetOrderNumber(string orderDate)
         {
-            var max = _orders.Max(a => a.OrderNumber);
-            return max + 1;
+            bool alreadyOrder = allOrdersOnDate.ContainsKey(orderDate);
+            if (alreadyOrder)
+            {
+                var orders = GetAllOrders(orderDate);
+                var max = orders.Max(a => a.OrderNumber);
+                return max + 1;
+            }
+            return 1;
         }
 
         public void WriteLine(Response orderInfo)
         {
-            _orders.Add(orderInfo.Order);
+            var DateOrderList = new List<Order>();
+
+            if (allOrdersOnDate.ContainsKey(orderInfo.Order.OrderDate))
+            {
+                DateOrderList = allOrdersOnDate[orderInfo.Order.OrderDate];
+                DateOrderList.Add(orderInfo.Order);
+
+                allOrdersOnDate.Remove(orderInfo.Order.OrderDate);
+                allOrdersOnDate.Add(orderInfo.Order.OrderDate, DateOrderList);
+            }
+            else
+            {
+                DateOrderList.Add(orderInfo.Order);
+
+                allOrdersOnDate.Add(orderInfo.Order.OrderDate, DateOrderList);
+            }
         }
 
         public Order CheckForOrder(string orderDate, int orderNumber)
         {
-            return _orders.FirstOrDefault(a => a.OrderNumber == orderNumber);
+            var DateOrderList = allOrdersOnDate[orderDate];
+
+            return DateOrderList.FirstOrDefault(a => a.OrderNumber == orderNumber);
         }
 
         public void DeleteOrder(Response order)
         {
-            _orders.RemoveAll(o => o.OrderNumber == order.Order.OrderNumber);
+            var DateOrderList = allOrdersOnDate[order.Order.OrderDate];
+            DateOrderList.Remove(order.Order);
+
+            if (DateOrderList.Count == 0)
+            {
+                allOrdersOnDate.Remove(order.Order.OrderDate);
+            }
+            else
+            {
+                allOrdersOnDate.Remove(order.Order.OrderDate);
+                allOrdersOnDate.Add(order.Order.OrderDate, DateOrderList);
+            }
         }
 
         public void ChangeOrder(Response order)
         {
             DeleteOrder(order);
-            WriteLine(order);
+            //WriteLine(order);
         }
 
         public void WriteError(ErrorLogger log)
@@ -169,6 +220,13 @@ namespace FlooringProgram.Data
             }
         }
 
-
+        public bool DoesDateExist(string orderDate)
+        {
+            if (allOrdersOnDate.ContainsKey(orderDate))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

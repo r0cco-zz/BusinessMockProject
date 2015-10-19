@@ -26,5 +26,7 @@ namespace FlooringProgram.Models
         void ChangeOrder(Response order);
 
         void WriteError(ErrorLogger log);
+
+        bool DoesDateExist(string orderDate);
     }
 }
