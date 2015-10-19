@@ -147,18 +147,27 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 Console.Clear();
-                Console.Write("Please enter the product type (Carpet, Laminate, Tile, Wood) : ");
+                Console.Write("Please enter the product type (Choices: (C)arpet, (L)aminate, (T)ile, or (W)ood) : ");
                 string productType = Console.ReadLine();
 
                 if (productType != null)
                     switch (productType.ToUpper())
                     {
+                        case "C":
                         case "CARPET":
-
-
+                            productType = "Carpet";
+                            return productType;
+                        case "L":
                         case "LAMINATE":
+                            productType = "Laminate";
+                            return productType;
+                        case "T":
                         case "TILE":
+                            productType = "Tile";
+                            return productType;
+                        case "W":
                         case "WOOD":
+                            productType = "Wood";
                             return productType;
                         default:
                             var log = new ErrorLogger()
@@ -250,7 +259,7 @@ namespace FlooringProgram.UI.WorkFlow
                     var log = new ErrorLogger()
                     {
                         TimeOfError = DateTime.Now,
-                        Message = String.Format("AddOrder : order display error : {0}", response.Message)
+                        Message = $"AddOrder : order display error : {response.Message}"
                     };
                     Ops.ErrorPassdown(log);
 
@@ -269,13 +278,10 @@ namespace FlooringProgram.UI.WorkFlow
 
             if (input != null && (input.ToUpper() == "Y" || input.ToUpper() == "YES"))
             {
-              
-
-                Response UIOrder;
-                UIOrder = orderInfo;
+                var uiOrder = orderInfo;
 
                 // this method will pass order info to the BLL
-                Ops.PassAddToData(UIOrder);
+                Ops.PassAddToData(uiOrder);
                 Console.WriteLine("Your order has been saved successfully!");
                 Console.WriteLine("Press enter to return to main menu");
                 Console.ReadLine();

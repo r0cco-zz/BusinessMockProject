@@ -243,13 +243,14 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 Console.WriteLine("Press enter if no change...");
-                Console.Write("Enter new product type (Choices : Carpet, Laminate, Tile, Wood) ({0}) : ", orderInfo.Order.ProductType.ProductType);
+                Console.Write("Enter new product type (Choices : (C)arpet, (L)aminate, (T)ile, (W)ood) ({0}) : ", orderInfo.Order.ProductType.ProductType);
                 var newProductType = Console.ReadLine();
                 if (newProductType == null) continue;
                 switch (newProductType.ToUpper())
                 {
                     case "":
                         return orderInfo;
+                    case "C":
                     case "CARPET":
                         orderInfo.Order.ProductType = new ProductTypes()
                         {
@@ -258,6 +259,7 @@ namespace FlooringProgram.UI.WorkFlow
                             LaborCost = (decimal)2.10
                         };
                         return orderInfo;
+                    case "L":
                     case "LAMINATE":
                         orderInfo.Order.ProductType = new ProductTypes()
                         {
@@ -266,6 +268,7 @@ namespace FlooringProgram.UI.WorkFlow
                             LaborCost = (decimal)2.10
                         };
                         return orderInfo;
+                    case "T":
                     case "TILE":
                         orderInfo.Order.ProductType = new ProductTypes()
                         {
@@ -274,6 +277,7 @@ namespace FlooringProgram.UI.WorkFlow
                             LaborCost = (decimal)4.15
                         };
                         return orderInfo;
+                    case "W":
                     case "WOOD":
                         orderInfo.Order.ProductType = new ProductTypes()
                         {
@@ -299,10 +303,9 @@ namespace FlooringProgram.UI.WorkFlow
             do
             {
                 decimal newArea;
-                string newAreaString;
                 Console.WriteLine("Press enter if no change...");
                 Console.Write("Enter new area ({0}) : ", orderInfo.Order.Area);
-                newAreaString = Console.ReadLine();
+                var newAreaString = Console.ReadLine();
                 bool validArea = decimal.TryParse(newAreaString, out newArea);
                 if (newAreaString != "" && validArea && newArea > 0)
                 {
