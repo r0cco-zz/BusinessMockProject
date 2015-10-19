@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using FlooringProgram.BLL;
 using FlooringProgram.Models;
-using System.IO;
-using FlooringProgram.Data;
 
 namespace FlooringProgram.UI.WorkFlow
 {
@@ -24,7 +21,7 @@ namespace FlooringProgram.UI.WorkFlow
                 int orderNumber = GetOrderNumberFromUser();
 
                 Response response = Ops.EditOrder(orderDate, orderNumber);
-                if (response.Success && response != null)
+                if (response.Success)
                 {
                     Response ultimateEdit = DisplayOrder(response);
                     if (ultimateEdit != null)
@@ -41,14 +38,13 @@ namespace FlooringProgram.UI.WorkFlow
 
         public string GetOrderDateFromUser()
         {
-            string input = "";
+            string input;
             do
             {
                 Console.Clear();
-                string orderDateString = "";
                 DateTime orderDate;
                 Console.Write("Enter an order date: ");
-                orderDateString = Console.ReadLine();
+                var orderDateString = Console.ReadLine();
                 bool validDate = DateTime.TryParse(orderDateString, out orderDate);
 
 
@@ -71,19 +67,20 @@ namespace FlooringProgram.UI.WorkFlow
                     Ops.ErrorPassdown(log);
                 }
 
-                if (validDate && !doesExist)
+                if (validDate)
                     Console.WriteLine("There are no matching orders...");
                 Console.WriteLine("Press enter to continue, or (M)ain Menu...");
 
                 var log2 = new ErrorLogger()
                 {
                     TimeOfError = DateTime.Now,
-                    Message = String.Format("EditOrder : no orders on date entered : {0}", orderDateString)
+                    Message = $"EditOrder : no orders on date entered : {orderDateString}"
                 };
                 Ops.ErrorPassdown(log2);
 
-                input = Console.ReadLine().ToUpper();
-                if (input.ToUpper() == "M")
+                input = Console.ReadLine();
+                input = input?.ToUpper();
+                if (input != null && input.ToUpper() == "M")
                 {
                     return "X";
                 }
@@ -127,7 +124,7 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Clear();
                 Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.Substring(0, 2),
                     response.Order.OrderDate.Substring(2, 2),
-                    response.Order.OrderDate.ToString().Substring(4));
+                    response.Order.OrderDate.Substring(4));
                 Console.WriteLine("Order number {0:0000}", response.Order.OrderNumber);
                 Console.WriteLine("\nCustomer name : {0}", response.Order.CustomerName);
                 Console.WriteLine("Area : {0} sq ft", response.Order.Area);
@@ -152,7 +149,7 @@ namespace FlooringProgram.UI.WorkFlow
                 var log = new ErrorLogger()
                 {
                     TimeOfError = DateTime.Now,
-                    Message = String.Format("EditOrder : error displaying order data from selected date : {0}", response.Message)
+                    Message = $"EditOrder : error displaying order data from selected date : {response.Message}"
                 };
                 Ops.ErrorPassdown(log);
 
@@ -165,18 +162,18 @@ namespace FlooringProgram.UI.WorkFlow
             return null;
         }
 
-        public Response ConfirmUserEdit(Response OrderInfo)
+        public Response ConfirmUserEdit(Response orderInfo)
         {
             Console.Write("Is this the order you wish to edit (y/n) ? : ");
             string input = Console.ReadLine();
 
-            if (input.ToUpper() == "Y" || input.ToUpper() == "YES")
+            if (input != null && (input.ToUpper() == "Y" || input.ToUpper() == "YES"))
             {
-                GetNewUserName(OrderInfo);
-                GetNewUserState(OrderInfo);
-                GetNewUserProductType(OrderInfo);
-                GetNewUserArea(OrderInfo);
-                Response response = Ops.EditedOrder(OrderInfo);
+                GetNewUserName(orderInfo);
+                GetNewUserState(orderInfo);
+                GetNewUserProductType(orderInfo);
+                GetNewUserArea(orderInfo);
+                Response response = Ops.EditedOrder(orderInfo);
                 return response;
             }
             else
@@ -190,10 +187,9 @@ namespace FlooringProgram.UI.WorkFlow
 
         public Response GetNewUserName(Response orderInfo)
         {
-            string newName = "";
             Console.WriteLine("Press enter if no change...");
             Console.Write("Enter new customer name ({0}) : ", orderInfo.Order.CustomerName);
-            newName = Console.ReadLine();
+            var newName = Console.ReadLine();
             if (newName != "")
             {
                 orderInfo.Order.CustomerName = newName;
@@ -205,10 +201,11 @@ namespace FlooringProgram.UI.WorkFlow
         {
             do
             {
-                string newState;
                 Console.WriteLine("Press enter if no change...");
                 Console.Write("Enter new state (OH, PA, MI, or IN) as 2-letter abbreviation ({0}) : ", orderInfo.Order.State);
-                newState = Console.ReadLine().ToUpper();
+                var newState = Console.ReadLine();
+                newState = newState?.ToUpper();
+                if (newState == null) continue;
                 switch (newState.ToUpper())
                 {
                     case "":
@@ -238,7 +235,6 @@ namespace FlooringProgram.UI.WorkFlow
                         Ops.ErrorPassdown(log);
                         break;
                 }
-
             } while (true);
         }
 
@@ -246,10 +242,10 @@ namespace FlooringProgram.UI.WorkFlow
         {
             do
             {
-                string newProductType = "";
                 Console.WriteLine("Press enter if no change...");
                 Console.Write("Enter new product type (Choices : Carpet, Laminate, Tile, Wood) ({0}) : ", orderInfo.Order.ProductType.ProductType);
-                newProductType = Console.ReadLine();
+                var newProductType = Console.ReadLine();
+                if (newProductType == null) continue;
                 switch (newProductType.ToUpper())
                 {
                     case "":
@@ -341,7 +337,7 @@ namespace FlooringProgram.UI.WorkFlow
 
         public void FinalDisplay(Response response)
         {
-            if (response.Success && response != null)
+            if (response.Success)
             {
                 Console.Clear();
                 Console.WriteLine("Order date : {0}/{1}/{2}", response.Order.OrderDate.Substring(0, 2),
@@ -364,12 +360,12 @@ namespace FlooringProgram.UI.WorkFlow
 
                 //method to take this input and use it to either write on the data or not
             }
-            if (!response.Success || response == null)
+            if (!response.Success)
             {
                 var log = new ErrorLogger()
                 {
                     TimeOfError = DateTime.Now,
-                    Message = String.Format("EditOrder : error displaying order info for final validation : {0}", response.Message)
+                    Message = $"EditOrder : error displaying order info for final validation : {response.Message}"
                 };
                 Ops.ErrorPassdown(log);
 
@@ -383,8 +379,8 @@ namespace FlooringProgram.UI.WorkFlow
         public void ConfirmFinalLastEdit(Response response)
         {
             Console.Write("Do you wish to save these changes to the order (y/n) ? : ");
-            string input = Console.ReadLine();
-            if (input.ToUpper() == "Y" || input.ToUpper() == "YES")
+            var input = Console.ReadLine();
+            if (input != null && (input.ToUpper() == "Y" || input.ToUpper() == "YES"))
             {
                 Ops.PassEditBll(response);
             }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FlooringProgram.Data;
+﻿using FlooringProgram.Data;
 using NUnit.Framework;
 using FlooringProgram.Models;
 
@@ -12,16 +7,16 @@ namespace FlooringProgram.Tests
     [TestFixture]
     public class DataTests
     {
-        public MockOrderRepository target;
+        public MockOrderRepository Target;
 
         [SetUp]
         public void StartUp()
         {
-            target = new MockOrderRepository();
+            Target = new MockOrderRepository();
         }
 
         [Test]
-        public void returnAdd()
+        public void ReturnAdd()
         {
             int expected = 5;
             Response orderInfo = new Response();
@@ -40,19 +35,19 @@ namespace FlooringProgram.Tests
                     MaterialCost = (decimal) 5.15,
                     LaborCost = (decimal) 4.75
                 },
-                Area = (decimal) 100,
+                Area = 100,
                 MaterialCost = (decimal) 515.00,
                 LaborCost = (decimal) 475.00,
                 Tax = (decimal) 61.875000,
                 Total = (decimal) 1051.875000
             };
 
-            target.WriteLine(orderInfo);
-            int result = target.GetAllOrders("12122054").Count;
+            Target.WriteLine(orderInfo);
+            int result = Target.GetAllOrders("12122054").Count;
             Assert.AreEqual(result, expected);
         }
         [Test]
-        public void returnRemove()
+        public void ReturnRemove()
         {
             int expected = 3;
             Response orderInfo = new Response();
@@ -70,19 +65,19 @@ namespace FlooringProgram.Tests
                     MaterialCost = (decimal)5.15,
                     LaborCost = (decimal)4.75
                 },
-                Area = (decimal)100,
+                Area = 100,
                 MaterialCost = (decimal)515.00,
                 LaborCost = (decimal)475.00,
                 Tax = (decimal)61.875000,
                 Total = (decimal)1051.875000
             };
-            target.DeleteOrder(orderInfo);
-            int result = target.GetAllOrders("12122054").Count;
+            Target.DeleteOrder(orderInfo);
+            int result = Target.GetAllOrders("12122054").Count;
             Assert.AreEqual(expected, result);
         }
 
         [Test]
-        public void returnEdit()
+        public void ReturnEdit()
         {
             string expected = "Sam";
             Response orderInfo = new Response();
@@ -100,13 +95,13 @@ namespace FlooringProgram.Tests
                     MaterialCost = (decimal)5.15,
                     LaborCost = (decimal)4.75
                 },
-                Area = (decimal)100,
+                Area = 100,
                 MaterialCost = (decimal)515.00,
                 LaborCost = (decimal)475.00,
                 Tax = (decimal)61.875000,
                 Total = (decimal)1051.875000
             };
-            target.ChangeOrder(orderInfo);
+            Target.ChangeOrder(orderInfo);
             Assert.AreNotEqual(orderInfo.Order.CustomerName, expected);
         }
     }
