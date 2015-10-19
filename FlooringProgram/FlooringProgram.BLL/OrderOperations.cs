@@ -1,4 +1,5 @@
-﻿using FlooringProgram.Models;
+﻿using System;
+using FlooringProgram.Models;
 
 namespace FlooringProgram.BLL
 {
@@ -169,6 +170,12 @@ namespace FlooringProgram.BLL
         {
             //var repo = new OrderRepository();
             _repo.WriteError(log);
+        }
+
+        public bool DoesDateExistBLL(string orderDate)
+        {
+            bool dateExists = _repo.DoesDateExist(orderDate);
+            return dateExists;
         }
     }
 }

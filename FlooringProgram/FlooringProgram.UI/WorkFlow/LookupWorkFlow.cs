@@ -41,7 +41,9 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Write("Enter an order date: ");
                 orderDateString = Console.ReadLine();
                 bool validDate = DateTime.TryParse(orderDateString, out orderDate);
-                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDate.ToString("MMddyyyy")));
+
+                
+                bool doesExist = Ops.DoesDateExistBLL(orderDate.ToString("MMddyyyy")); //here
                 if (doesExist && validDate)
                 {
                     return orderDate.ToString("MMddyyyy");

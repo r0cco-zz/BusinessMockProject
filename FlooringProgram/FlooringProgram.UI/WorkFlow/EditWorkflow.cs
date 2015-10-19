@@ -39,8 +39,6 @@ namespace FlooringProgram.UI.WorkFlow
             }
         }
 
-
-
         public string GetOrderDateFromUser()
         {
             string input = "";
@@ -52,7 +50,9 @@ namespace FlooringProgram.UI.WorkFlow
                 Console.Write("Enter an order date: ");
                 orderDateString = Console.ReadLine();
                 bool validDate = DateTime.TryParse(orderDateString, out orderDate);
-                bool doesExist = File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDate.ToString("MMddyyyy")));
+
+
+                bool doesExist = Ops.DoesDateExistBLL(orderDate.ToString("MMddyyyy")); //here
                 if (doesExist && validDate)
                 {
 
@@ -207,7 +207,7 @@ namespace FlooringProgram.UI.WorkFlow
             {
                 string newState;
                 Console.WriteLine("Press enter if no change...");
-                Console.Write("Enter new state as 2-letter abbreviation ({0}) : ", orderInfo.Order.State);
+                Console.Write("Enter new state (OH, PA, MI, or IN) as 2-letter abbreviation ({0}) : ", orderInfo.Order.State);
                 newState = Console.ReadLine().ToUpper();
                 switch (newState.ToUpper())
                 {
@@ -248,7 +248,7 @@ namespace FlooringProgram.UI.WorkFlow
             {
                 string newProductType = "";
                 Console.WriteLine("Press enter if no change...");
-                Console.Write("Enter new product type ({0}) : ", orderInfo.Order.ProductType.ProductType);
+                Console.Write("Enter new product type (Choices : Carpet, Laminate, Tile, Wood) ({0}) : ", orderInfo.Order.ProductType.ProductType);
                 newProductType = Console.ReadLine();
                 switch (newProductType.ToUpper())
                 {

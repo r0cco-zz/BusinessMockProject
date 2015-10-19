@@ -109,9 +109,6 @@ namespace FlooringProgram.Tests
             target.ChangeOrder(orderInfo);
             Assert.AreNotEqual(orderInfo.Order.CustomerName, expected);
         }
-
-        
-
     }
 
 }

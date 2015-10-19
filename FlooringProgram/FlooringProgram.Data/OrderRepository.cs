@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,29 +38,29 @@ namespace FlooringProgram.Data
                 order.ProductType = new ProductTypes();
 
                 order.OrderNumber = int.Parse(columns[0]);
-            
-                for (int j = 1; j < columns.Count()-11; j++)
+
+                for (int j = 1; j < columns.Count() - 11; j++)
                 {
-                    order.CustomerName += columns[j] +",";
+                    order.CustomerName += columns[j] + ",";
                 }
                 order.CustomerName += columns[columns.Count() - 11];
 
-                order.State = columns[columns.Count()-10];
-                order.TaxRate = decimal.Parse(columns[columns.Count()-9]);
-                order.ProductType.ProductType = (columns[columns.Count()-8]);
-                order.Area = decimal.Parse(columns[columns.Count()-7]);
-                order.ProductType.MaterialCost = decimal.Parse(columns[columns.Count()-6]);
-                order.ProductType.LaborCost = decimal.Parse(columns[columns.Count()-5]);
-                order.MaterialCost = decimal.Parse(columns[columns.Count()-4]);
-                order.LaborCost = decimal.Parse(columns[columns.Count()-3]);
-                order.Tax = decimal.Parse(columns[columns.Count()-2]);
-                order.Total = decimal.Parse(columns[columns.Count()-1]);
+                order.State = columns[columns.Count() - 10];
+                order.TaxRate = decimal.Parse(columns[columns.Count() - 9]);
+                order.ProductType.ProductType = (columns[columns.Count() - 8]);
+                order.Area = decimal.Parse(columns[columns.Count() - 7]);
+                order.ProductType.MaterialCost = decimal.Parse(columns[columns.Count() - 6]);
+                order.ProductType.LaborCost = decimal.Parse(columns[columns.Count() - 5]);
+                order.MaterialCost = decimal.Parse(columns[columns.Count() - 4]);
+                order.LaborCost = decimal.Parse(columns[columns.Count() - 3]);
+                order.Tax = decimal.Parse(columns[columns.Count() - 2]);
+                order.Total = decimal.Parse(columns[columns.Count() - 1]);
 
                 order.OrderDate = (_filePath.Substring(17, 8));
 
                 orders.Add(order);
-            }
 
+            }
             return orders;
         }
 
@@ -227,6 +228,14 @@ namespace FlooringProgram.Data
             }
         }
 
+        public bool DoesDateExist(string orderDate)
+        {
+            if (File.Exists(String.Format(@"DataFiles\Orders_{0}.txt", orderDate)))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }  
 

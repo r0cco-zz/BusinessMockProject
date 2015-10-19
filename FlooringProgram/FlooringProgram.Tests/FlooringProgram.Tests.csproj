@@ -52,6 +52,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FlooringProgram.BLL\FlooringProgram.BLL.csproj">
+      <Project>{3c5a59fd-3c68-45f4-9015-7dd287cad0cc}</Project>
+      <Name>FlooringProgram.BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FlooringProgram.Data\FlooringProgram.Data.csproj">
       <Project>{14c2d284-0cae-411a-b09e-081e4991d19b}</Project>
       <Name>FlooringProgram.Data</Name>
@@ -78,6 +82,9 @@
     <Content Include="DataFiles\Taxes.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
