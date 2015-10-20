@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FlooringProgram.Models;
 
 namespace FlooringProgram.Data
@@ -12,9 +7,9 @@ namespace FlooringProgram.Data
     {
        
 
-        public static IOrderRepository CreateOrderRepository(string _sAttr)
+        public static IOrderRepository CreateOrderRepository(string sAttr)
         {
-            switch (_sAttr)
+            switch (sAttr)
             {
                 case "Prod":
                     return new OrderRepository();
@@ -23,7 +18,7 @@ namespace FlooringProgram.Data
                     return new MockOrderRepository();
 
                 default:
-                    throw new NotSupportedException(String.Format("{0} not supported!", _sAttr));
+                    throw new NotSupportedException(String.Format("{0} not supported!", sAttr));
             }
         }
     }

@@ -15,7 +15,7 @@ namespace FlooringProgram.UI.WorkFlow
             Ops = orderOperations;
         }
 
-        private List<Order> _orderListFromDate;
+        public List<Order> OrderListFromDate;
 
         public void Execute()
         {
@@ -39,7 +39,7 @@ namespace FlooringProgram.UI.WorkFlow
                 bool validDate = DateTime.TryParse(orderDateString, out orderDate);
 
                 
-                bool doesExist = Ops.DoesDateExistBLL(orderDate.ToString("MMddyyyy")); //here
+                bool doesExist = Ops.DoesDateExistBll(orderDate.ToString("MMddyyyy")); //here
                 if (doesExist && validDate)
                 {
                     return orderDate.ToString("MMddyyyy");
@@ -89,7 +89,7 @@ namespace FlooringProgram.UI.WorkFlow
 
             if (response.Success)
             {
-                _orderListFromDate = response.OrderList;
+                OrderListFromDate = response.OrderList;
                 PrintOrderInfo(response.OrderList);
             }
             else

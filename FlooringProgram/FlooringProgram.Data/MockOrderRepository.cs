@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FlooringProgram.Models;
 
 namespace FlooringProgram.Data
 {
     public class MockOrderRepository : IOrderRepository
     {
-        public List<Order> _orders = new List<Order>();
+        public List<Order> Orders = new List<Order>();
 
         Dictionary<string, List<Order>> allOrdersOnDate = new Dictionary<string, List<Order>>();
 
@@ -55,11 +52,11 @@ namespace FlooringProgram.Data
 
                 order.OrderDate = (_filePath.Substring(17, 8));
 
-                _orders.Add(order);
+                Orders.Add(order);
             }
 
             var results =
-                _orders.OrderBy(o => o.OrderDate)
+                Orders.OrderBy(o => o.OrderDate)
                     .GroupBy(o => o.OrderDate)
                     .Select(dateOrders => new {Date = dateOrders.Key, Orders = dateOrders});
 
@@ -72,15 +69,13 @@ namespace FlooringProgram.Data
 
         public List<Order> GetAllOrders(string orderDate)
         {
-            List<Order> DateOrderList = new List<Order>();
-
             if (allOrdersOnDate.ContainsKey(orderDate) && allOrdersOnDate[orderDate] != null)
             {
-                DateOrderList = allOrdersOnDate[orderDate];
-                return DateOrderList;
+                var dateOrderList = allOrdersOnDate[orderDate];
+                return dateOrderList;
             }
 
-            return _orders;
+            return Orders;
         }
 
         public List<ProductTypes> GetProducts()
@@ -165,45 +160,45 @@ namespace FlooringProgram.Data
 
         public void WriteLine(Response orderInfo)
         {
-            var DateOrderList = new List<Order>();
+            var dateOrderList = new List<Order>();
 
             if (allOrdersOnDate.ContainsKey(orderInfo.Order.OrderDate))
             {
-                DateOrderList = allOrdersOnDate[orderInfo.Order.OrderDate];
-                DateOrderList.Add(orderInfo.Order);
+                dateOrderList = allOrdersOnDate[orderInfo.Order.OrderDate];
+                dateOrderList.Add(orderInfo.Order);
 
                 allOrdersOnDate.Remove(orderInfo.Order.OrderDate);
-                allOrdersOnDate.Add(orderInfo.Order.OrderDate, DateOrderList);
+                allOrdersOnDate.Add(orderInfo.Order.OrderDate, dateOrderList);
             }
             else
             {
-                DateOrderList.Add(orderInfo.Order);
+                dateOrderList.Add(orderInfo.Order);
 
-                allOrdersOnDate.Add(orderInfo.Order.OrderDate, DateOrderList);
+                allOrdersOnDate.Add(orderInfo.Order.OrderDate, dateOrderList);
             }
         }
 
         public Order CheckForOrder(string orderDate, int orderNumber)
         {
-            var DateOrderList = allOrdersOnDate[orderDate];
+            var dateOrderList = allOrdersOnDate[orderDate];
 
-            return DateOrderList.FirstOrDefault(a => a.OrderNumber == orderNumber);
+            return dateOrderList.FirstOrDefault(a => a.OrderNumber == orderNumber);
         }
 
         public void DeleteOrder(Response order)
         {
-            var DateOrderList = allOrdersOnDate[order.Order.OrderDate];
-            DateOrderList.Remove(order.Order);
+            var dateOrderList = allOrdersOnDate[order.Order.OrderDate];
+            dateOrderList.Remove(order.Order);
 
 
-            if (DateOrderList.Count == 0)
+            if (dateOrderList.Count == 0)
             {
                 allOrdersOnDate.Remove(order.Order.OrderDate);
             }
             else
             {
                 allOrdersOnDate.Remove(order.Order.OrderDate);
-                allOrdersOnDate.Add(order.Order.OrderDate, DateOrderList);
+                allOrdersOnDate.Add(order.Order.OrderDate, dateOrderList);
             }
         }
 
@@ -215,7 +210,7 @@ namespace FlooringProgram.Data
 
         public void WriteError(ErrorLogger log)
         {
-            using (var writer = File.AppendText(String.Format(@"DataFiles\log.txt")))
+            using (var writer = File.AppendText(@"DataFiles\log.txt"))
             {
                 writer.WriteLine("{0:s} : {1}", log.TimeOfError, log.Message);
             }

@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Common;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FlooringProgram.Models;
-using FlooringProgram.Data;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 
 namespace FlooringProgram.Data
 {
@@ -17,14 +10,14 @@ namespace FlooringProgram.Data
     {
         public List<Order> GetAllOrders(string orderDate)
         {
-            string _filePath = String.Format(@"DataFiles\Orders_{0}.txt", orderDate); // gonna change for more files
+            string filePath = String.Format(@"DataFiles\Orders_{0}.txt", orderDate); // gonna change for more files
 
             GetProducts();
 
             List<Order> orders = new List<Order>();
 
             //need to check if filepath is null!!
-            var reader = File.ReadAllLines(_filePath);
+            var reader = File.ReadAllLines(filePath);
 
             for (int i = 1; i < reader.Length; i++)
             {
@@ -56,7 +49,7 @@ namespace FlooringProgram.Data
                 order.Tax = decimal.Parse(columns[columns.Count() - 2]);
                 order.Total = decimal.Parse(columns[columns.Count() - 1]);
 
-                order.OrderDate = (_filePath.Substring(17, 8));
+                order.OrderDate = (filePath.Substring(17, 8));
 
                 orders.Add(order);
 
@@ -222,7 +215,7 @@ namespace FlooringProgram.Data
 
         public void WriteError(ErrorLogger log)
         {
-            using (var writer = File.AppendText(String.Format(@"DataFiles\log.txt")))
+            using (var writer = File.AppendText(@"DataFiles\log.txt"))
             {
                 writer.WriteLine("{0:s} : {1}", log.TimeOfError, log.Message);
             }
